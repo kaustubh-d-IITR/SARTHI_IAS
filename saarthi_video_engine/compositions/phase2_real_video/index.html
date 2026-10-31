@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sarthi proof phase2-lewin-atwood</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 720px;
+        height: 1280px;
+        overflow: hidden;
+        background: #000000;
+        font-family: "Inter", sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 720px;
+        height: 1280px;
+      }
+      video {
+        position: absolute;
+        object-fit: cover;
+      }
+      
+      #canvas-bg { position: absolute; inset: 0; background: #000; z-index: 0; }
+      #logo-mark { position: absolute; top: 48px; left: 36px; width: 72px; height: 72px; z-index: 6; }
+      #title-block { position: absolute; top: 56px; left: 36px; right: 36px; z-index: 5; }
+      #title-block h1 { margin: 0; color: #ffffff; font-size: 28px; line-height: 1.2; font-weight: 700; }
+      #card {
+        position: absolute; top: 168px; left: 36px; width: 648px; height: 900px;
+        border-radius: 32px; overflow: hidden; z-index: 2; background: #000;
+        border: 6px solid #ffffff;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      #card video, #card img { width: 100%; height: 100%; left: 0; top: 0; object-fit: contain; }
+      #credit { position: absolute; left: 36px; right: 36px; bottom: 28px; z-index: 7; text-align: center; }
+      #credit span { color: #f2f2f2; font-size: 20px; line-height: 1.3; }
+      .caption {
+        position: absolute; left: 72px; width: 576px; bottom: 250px; z-index: 6;
+        text-align: center;
+      }
+      .caption span {
+        display: inline-block; color: #ffffff; background: #6b2430;
+        border-radius: 12px; padding: 10px 16px; font-size: 28px; font-weight: 700;
+      }
+    
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-layout-family="bounded_card_with_title"
+      data-start="0"
+      data-duration="59.197"
+      data-width="720"
+      data-height="1280"
+    >
+      <div id="canvas-bg" data-layout-ignore="true"></div>
+      
+      
+      <div
+        id="title-card"
+        data-composition-id="title-card"
+        data-composition-src="compositions/title-card.html"
+        data-start="0.0"
+        data-duration="59.197"
+        data-width="720"
+        data-height="1280"
+        data-track-index="3"
+        data-track-kind="graphics"
+      ></div>
+    
+      <div id="card" data-layout-allow-overflow="true"><video id="teacher-end" class="clip" src="assets/teacher.mp4" data-start="0.0" data-duration="59.197" data-track-index="1" muted playsinline data-media-start="0.0"></video></div>
+      <div id="captions-host" data-track-kind="captions"><div id="cap-a17" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="0.0" data-duration="5.12" data-track-index="4">
+              <span>It has a mass, so it is weight mg.</span>
+            </div><div id="cap-a18" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="5.12" data-duration="2.4" data-track-index="4">
+              <span>The sum of all forces on the pulley must be zero.</span>
+            </div><div id="cap-a19" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="7.52" data-duration="3.2" data-track-index="4">
+              <span>Otherwise it would accelerate itself down, which it doesn't.</span>
+            </div><div id="cap-a20" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="10.72" data-duration="4.56" data-track-index="4">
+              <span>And so there has to be a force up, I will call it m.</span>
+            </div><div id="cap-a21" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="15.28" data-duration="4.4" data-track-index="4">
+              <span>And that force n has to cancel out all these three forces.</span>
+            </div><div id="cap-a22" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="19.68" data-duration="4.4" data-track-index="4">
+              <span>So that must be t1 plus t2 plus mg.</span>
+            </div><div id="cap-a23" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="24.08" data-duration="5.36" data-track-index="4">
+              <span>We will not need it any further in our calculations, but there has to be a force to hold that in place.</span>
+            </div><div id="cap-a24" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="29.44" data-duration="10.16" data-track-index="4">
+              <span>So to speak. So now we're going to calculate the acceleration under a condition that the rope</span>
+            </div><div id="cap-a25" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="39.6" data-duration="5.44" data-track-index="4">
+              <span>does not slip. That means our friction with the pulley, not friction here.</span>
+            </div><div id="cap-a26" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="45.04" data-duration="4.96" data-track-index="4">
+              <span>Here, otherwise the rope would slip. The rope would slip.</span>
+            </div><div id="cap-a27" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="50.0" data-duration="4.48" data-track-index="4">
+              <span>What it means if there is no slip, that if the rope moves one centimeter,</span>
+            </div><div id="cap-a28" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="54.48" data-duration="4.717" data-track-index="4">
+              <span>that the wheel also turned at the circumference one centimeter, that's what it means when there is no slip.</span>
+            </div></div>
+      
+      <div id="credit" class="clip" data-start="0" data-duration="59.197" data-track-index="6" data-layout-allow-caption-zone="true">
+        <span>Walter Lewin / MIT OpenCourseWare. CC BY 3.0. Adapted excerpt.</span>
+      </div>
+    
+      <audio
+        id="narration"
+        class="clip"
+        src="assets/narration.wav"
+        data-start="0"
+        data-duration="59.197"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+      
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#cap-a17 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 0.0);
+      tl.to("#cap-a17 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 5.0);
+      tl.set("#cap-a17 span", { opacity: 0, visibility: "hidden" }, 5.12);
+      tl.fromTo("#cap-a18 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 5.12);
+      tl.to("#cap-a18 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 7.3999999999999995);
+      tl.set("#cap-a18 span", { opacity: 0, visibility: "hidden" }, 7.52);
+      tl.fromTo("#cap-a19 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 7.52);
+      tl.to("#cap-a19 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 10.600000000000001);
+      tl.set("#cap-a19 span", { opacity: 0, visibility: "hidden" }, 10.72);
+      tl.fromTo("#cap-a20 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 10.72);
+      tl.to("#cap-a20 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 15.16);
+      tl.set("#cap-a20 span", { opacity: 0, visibility: "hidden" }, 15.28);
+      tl.fromTo("#cap-a21 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 15.28);
+      tl.to("#cap-a21 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 19.56);
+      tl.set("#cap-a21 span", { opacity: 0, visibility: "hidden" }, 19.68);
+      tl.fromTo("#cap-a22 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 19.68);
+      tl.to("#cap-a22 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 23.959999999999997);
+      tl.set("#cap-a22 span", { opacity: 0, visibility: "hidden" }, 24.08);
+      tl.fromTo("#cap-a23 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 24.08);
+      tl.to("#cap-a23 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 29.32);
+      tl.set("#cap-a23 span", { opacity: 0, visibility: "hidden" }, 29.44);
+      tl.fromTo("#cap-a24 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 29.44);
+      tl.to("#cap-a24 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 39.480000000000004);
+      tl.set("#cap-a24 span", { opacity: 0, visibility: "hidden" }, 39.6);
+      tl.fromTo("#cap-a25 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 39.6);
+      tl.to("#cap-a25 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 44.92);
+      tl.set("#cap-a25 span", { opacity: 0, visibility: "hidden" }, 45.04);
+      tl.fromTo("#cap-a26 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 45.04);
+      tl.to("#cap-a26 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 49.88);
+      tl.set("#cap-a26 span", { opacity: 0, visibility: "hidden" }, 50.0);
+      tl.fromTo("#cap-a27 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 50.0);
+      tl.to("#cap-a27 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 54.36);
+      tl.set("#cap-a27 span", { opacity: 0, visibility: "hidden" }, 54.48);
+      tl.fromTo("#cap-a28 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 54.48);
+      tl.to("#cap-a28 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 59.077000000000005);
+      tl.set("#cap-a28 span", { opacity: 0, visibility: "hidden" }, 59.197);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

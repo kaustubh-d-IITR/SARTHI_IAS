@@ -1,0 +1,432 @@
+{
+  "contract_version": "1.0.0",
+  "plan_id": "phase2-lewin-atwood",
+  "form": "short",
+  "input_media": {
+    "video_path": "assets/teacher.mp4",
+    "duration_seconds": 59.197,
+    "width": 400,
+    "height": 300,
+    "fps": 30,
+    "audio_path": "assets/narration.wav",
+    "media_origin": "authorized_local",
+    "transcript": {
+      "language": "en",
+      "translation_language": null,
+      "method": "whisper.cpp",
+      "model": "ggml-tiny.bin",
+      "provenance": "local whisper-cli 1.8.2, model ggml-tiny.bin, language forced to en with -l en, translate=false. Word times come from token offsets.",
+      "segments": [
+        {
+          "id": "a17",
+          "text": "It has a mass, so it is weight mg.",
+          "original_text": "It has a mass, so it is weight mg.",
+          "english_text": "It has a mass, so it is weight mg.",
+          "start": 0.0,
+          "end": 5.12,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.9332,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a18",
+          "text": "The sum of all forces on the pulley must be zero.",
+          "original_text": "The sum of all forces on the pulley must be zero.",
+          "english_text": "The sum of all forces on the pulley must be zero.",
+          "start": 5.12,
+          "end": 7.52,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.9557,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a19",
+          "text": "Otherwise it would accelerate itself down, which it doesn't.",
+          "original_text": "Otherwise it would accelerate itself down, which it doesn't.",
+          "english_text": "Otherwise it would accelerate itself down, which it doesn't.",
+          "start": 7.52,
+          "end": 10.72,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.9135,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a20",
+          "text": "And so there has to be a force up, I will call it m.",
+          "original_text": "And so there has to be a force up, I will call it m.",
+          "english_text": "And so there has to be a force up, I will call it m.",
+          "start": 10.72,
+          "end": 15.28,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.7842,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a21",
+          "text": "And that force n has to cancel out all these three forces.",
+          "original_text": "And that force n has to cancel out all these three forces.",
+          "english_text": "And that force n has to cancel out all these three forces.",
+          "start": 15.28,
+          "end": 19.68,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.9465,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a22",
+          "text": "So that must be t1 plus t2 plus mg.",
+          "original_text": "So that must be t1 plus t2 plus mg.",
+          "english_text": "So that must be t1 plus t2 plus mg.",
+          "start": 19.68,
+          "end": 24.08,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.9381,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a23",
+          "text": "We will not need it any further in our calculations, but there has to be a force to hold that in place.",
+          "original_text": "We will not need it any further in our calculations, but there has to be a force to hold that in place.",
+          "english_text": "We will not need it any further in our calculations, but there has to be a force to hold that in place.",
+          "start": 24.08,
+          "end": 29.44,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.8611,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a24",
+          "text": "So to speak. So now we're going to calculate the acceleration under a condition that the rope",
+          "original_text": "So to speak. So now we're going to calculate the acceleration under a condition that the rope",
+          "english_text": "So to speak. So now we're going to calculate the acceleration under a condition that the rope",
+          "start": 29.44,
+          "end": 39.6,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.8627,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a25",
+          "text": "does not slip. That means our friction with the pulley, not friction here.",
+          "original_text": "does not slip. That means our friction with the pulley, not friction here.",
+          "english_text": "does not slip. That means our friction with the pulley, not friction here.",
+          "start": 39.6,
+          "end": 45.04,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.8344,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a26",
+          "text": "Here, otherwise the rope would slip. The rope would slip.",
+          "original_text": "Here, otherwise the rope would slip. The rope would slip.",
+          "english_text": "Here, otherwise the rope would slip. The rope would slip.",
+          "start": 45.04,
+          "end": 50.0,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.8347,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a27",
+          "text": "What it means if there is no slip, that if the rope moves one centimeter,",
+          "original_text": "What it means if there is no slip, that if the rope moves one centimeter,",
+          "english_text": "What it means if there is no slip, that if the rope moves one centimeter,",
+          "start": 50.0,
+          "end": 54.48,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.8706,
+          "timing_precision": "word"
+        },
+        {
+          "id": "a28",
+          "text": "that the wheel also turned at the circumference one centimeter, that's what it means when there is no slip.",
+          "original_text": "that the wheel also turned at the circumference one centimeter, that's what it means when there is no slip.",
+          "english_text": "that the wheel also turned at the circumference one centimeter, that's what it means when there is no slip.",
+          "start": 54.48,
+          "end": 59.197,
+          "language": "en",
+          "language_source": "configured",
+          "confidence": 0.817,
+          "timing_precision": "word"
+        }
+      ]
+    }
+  },
+  "content_analysis": {
+    "primary_category": "physics_lecture",
+    "secondary_categories": [
+      "mechanics"
+    ],
+    "topic": "forces on the pulley",
+    "subtopics": [
+      "pulley",
+      "rope"
+    ],
+    "main_message": "It has a mass, so it is weight mg. The sum of all forces on the pulley must be zero. Otherwise it would accelerate itself down, which it doesn't. And so there has to be a force up, I will call it m. And that force n has to cancel out all these three forces. So that must be t1 plus t2 plus mg. We will not need it any further in our calculations, but there has to be a force to hold that in place. So",
+    "narrative_structure": "one continuous spoken explanation; the picture stays on the teacher unless a verified visual matches the words",
+    "emotional_tone": "instructional",
+    "entities": [
+      "pulley",
+      "rope"
+    ],
+    "confidence": 0.6,
+    "evidence": "ASR text of the selected interval. Tiny-model wording can be wrong.",
+    "source": "inferred"
+  },
+  "style": {
+    "exemplar_reference_id": "SHORT_03",
+    "layout_family": "bounded_card_with_title",
+    "template_family": "rounded_card_title_header",
+    "trusted": true
+  },
+  "decisions": [
+    {
+      "id": "teacher-end",
+      "action": "show_teacher",
+      "start": 0.0,
+      "end": 59.197,
+      "reason": "The teacher returns when the matched still's speech interval ends. Narration is a separate continuous clip.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.6,
+      "source": "inferred",
+      "asset_id": "teacher"
+    },
+    {
+      "id": "title",
+      "action": "title",
+      "start": 0.0,
+      "end": 59.197,
+      "reason": "The title repeats words from the transcript. It is not a channel logo.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.7,
+      "source": "observed",
+      "text": "FORCES ON THE PULLEY"
+    },
+    {
+      "id": "cap-a17",
+      "action": "caption",
+      "start": 0.0,
+      "end": 5.12,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.9332,
+      "source": "observed",
+      "text": "It has a mass, so it is weight mg."
+    },
+    {
+      "id": "cap-a18",
+      "action": "caption",
+      "start": 5.12,
+      "end": 7.52,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.9557,
+      "source": "observed",
+      "text": "The sum of all forces on the pulley must be zero."
+    },
+    {
+      "id": "cap-a19",
+      "action": "caption",
+      "start": 7.52,
+      "end": 10.72,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.9135,
+      "source": "observed",
+      "text": "Otherwise it would accelerate itself down, which it doesn't."
+    },
+    {
+      "id": "cap-a20",
+      "action": "caption",
+      "start": 10.72,
+      "end": 15.28,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.7842,
+      "source": "observed",
+      "text": "And so there has to be a force up, I will call it m."
+    },
+    {
+      "id": "cap-a21",
+      "action": "caption",
+      "start": 15.28,
+      "end": 19.68,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.9465,
+      "source": "observed",
+      "text": "And that force n has to cancel out all these three forces."
+    },
+    {
+      "id": "cap-a22",
+      "action": "caption",
+      "start": 19.68,
+      "end": 24.08,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.9381,
+      "source": "observed",
+      "text": "So that must be t1 plus t2 plus mg."
+    },
+    {
+      "id": "cap-a23",
+      "action": "caption",
+      "start": 24.08,
+      "end": 29.44,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.8611,
+      "source": "observed",
+      "text": "We will not need it any further in our calculations, but there has to be a force to hold that in place."
+    },
+    {
+      "id": "cap-a24",
+      "action": "caption",
+      "start": 29.44,
+      "end": 39.6,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.8627,
+      "source": "observed",
+      "text": "So to speak. So now we're going to calculate the acceleration under a condition that the rope"
+    },
+    {
+      "id": "cap-a25",
+      "action": "caption",
+      "start": 39.6,
+      "end": 45.04,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.8344,
+      "source": "observed",
+      "text": "does not slip. That means our friction with the pulley, not friction here."
+    },
+    {
+      "id": "cap-a26",
+      "action": "caption",
+      "start": 45.04,
+      "end": 50.0,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.8347,
+      "source": "observed",
+      "text": "Here, otherwise the rope would slip. The rope would slip."
+    },
+    {
+      "id": "cap-a27",
+      "action": "caption",
+      "start": 50.0,
+      "end": 54.48,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.8706,
+      "source": "observed",
+      "text": "What it means if there is no slip, that if the rope moves one centimeter,"
+    },
+    {
+      "id": "cap-a28",
+      "action": "caption",
+      "start": 54.48,
+      "end": 59.197,
+      "reason": "Caption text is the English transcript for this ASR segment. Timing is the provider timestamp, not an even split.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.817,
+      "source": "observed",
+      "text": "that the wheel also turned at the circumference one centimeter, that's what it means when there is no slip."
+    }
+  ],
+  "audio": {
+    "preserve_original": true,
+    "narration_path": "assets/narration.wav",
+    "narration_interval": {
+      "start": 0.0,
+      "end": 59.197,
+      "source_in": 124.72,
+      "source_out": 184.08
+    },
+    "music": {
+      "path": null,
+      "identity": null,
+      "identity_status": "unknown",
+      "source": "default",
+      "gain_under_speech": 0.0,
+      "gain_open": 0.0
+    }
+  },
+  "render": {
+    "width": 720,
+    "height": 1280,
+    "fps": 30,
+    "object_fit": "contain"
+  },
+  "attribution": {
+    "text": "Walter Lewin / MIT OpenCourseWare. CC BY 3.0. Adapted excerpt.",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "changes": "Excerpt re-framed to 9:16 with English captions. Speech was not replaced."
+  },
+  "limitations": [
+    "Teacher-visibility percentages in the style profile are 1fps estimates from other videos.",
+    "No font file was identified. Inter is a HyperFrames default.",
+    "No music bed is used. The reference tracks were not identified.",
+    "ASR is whisper.cpp ggml-tiny. It was not hand-corrected.",
+    "The picture is a published lecture recording. It was not claimed to be an unedited camera master.",
+    "SHORT_30, SHORT_32, and SHORT_37 were not used to seed the style profile.",
+    "Other completed records in this layout family consulted as neighbors: SHORT_10, SHORT_50, SHORT_07.",
+    "Commons stills of a one-mass pulley and a historical Atwood apparatus were downloaded and rejected. Neither picture matches the spoken force sum, so the teacher stays visible."
+  ]
+}

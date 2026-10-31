@@ -1,0 +1,37 @@
+{
+  "contract": "saarthi.render_defaults",
+  "version": "1.0.0",
+  "canvas": {
+    "width": 720,
+    "height": 1280,
+    "fps": 30,
+    "background": "#000000"
+  },
+  "hyperframes": {
+    "quality": "draft",
+    "cli": "npx hyperframes"
+  },
+  "audio": {
+    "narration_volume": 1,
+    "music_gain_open": 0.35,
+    "music_gain_under_speech": 0.14,
+    "duck_attack_seconds": 0.15,
+    "duck_release_seconds": 0.4
+  },
+  "bounded_card": {
+    "radius_px": 32,
+    "border_px": 6,
+    "border_color": "#ffffff",
+    "title_color": "#ffffff",
+    "caption_color": "#ffffff",
+    "caption_chip": "#6b2430",
+    "font_family": "Inter"
+  },
+  "defaults_are_not_measurements": {
+    "radius_px": "Frames show a rounded card. The corner radius was not measured. 32px is a prototype default.",
+    "font_family": "No font file was identified in the dataset. Inter is a family HyperFrames resolves by name.",
+    "caption_chip": "Completed card references describe a maroon caption chip. This hex is an approximation, not a sampled color.",
+    "music_gain_under_speech": "Set to the HyperFrames music-under-voice level. The reference analyst metered audio and did not listen to it, so no music title or measured ducking curve exists.",
+    "music_file": "The proof of concept generates a quiet tone. It is not a track heard in any reference."
+  }
+}

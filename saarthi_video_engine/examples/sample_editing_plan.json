@@ -1,0 +1,214 @@
+{
+  "contract_version": "1.0.0",
+  "plan_id": "poc-short_03",
+  "form": "short",
+  "input_media": {
+    "video_path": "assets/teacher.mp4",
+    "duration_seconds": 8.0,
+    "width": 720,
+    "height": 1280,
+    "fps": 30,
+    "audio_path": "assets/narration.wav",
+    "media_origin": "synthetic_test",
+    "transcript": {
+      "language": "en",
+      "translation_language": null,
+      "segments": [
+        {
+          "id": "s0",
+          "text": "THIS IS A PIPELINE TEST",
+          "start": 0.3,
+          "end": 2.4
+        },
+        {
+          "id": "s1",
+          "text": "THE PICTURE CHANGES HERE",
+          "start": 2.6,
+          "end": 4.4
+        },
+        {
+          "id": "s2",
+          "text": "THE VOICE KEEPS GOING",
+          "start": 4.6,
+          "end": 7.6
+        }
+      ]
+    }
+  },
+  "content_analysis": {
+    "primary_category": "pipeline_test",
+    "secondary_categories": [],
+    "topic": "Render-pipeline proof",
+    "subtopics": [
+      "caption timing",
+      "picture change under continuous narration"
+    ],
+    "main_message": "The original narration continues while the picture cuts to a placeholder.",
+    "narrative_structure": "statement, picture change, statement",
+    "emotional_tone": "neutral",
+    "entities": [],
+    "confidence": 1.0,
+    "evidence": "Written for the synthetic proof. Not inferred from a teacher transcript.",
+    "source": "default"
+  },
+  "style": {
+    "exemplar_reference_id": "SHORT_03",
+    "layout_family": "bounded_card_with_title",
+    "template_family": "rounded_card_title_header",
+    "trusted": true
+  },
+  "decisions": [
+    {
+      "id": "vis-teacher-open",
+      "action": "show_teacher",
+      "start": 0.0,
+      "end": 2.5,
+      "reason": "SHORT_03 is a completed bounded_card_with_title reference. Its family uses hard cuts and keeps captions up while the picture changes. These clock times are the test timeline, not timestamps copied from that Short.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.6,
+      "source": "inferred",
+      "asset_id": "teacher"
+    },
+    {
+      "id": "vis-broll",
+      "action": "replace_with_broll",
+      "start": 2.5,
+      "end": 4.5,
+      "reason": "The test sentence names the picture change. No licensed stock clip was retrieved, so the asset is a labeled placeholder.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.4,
+      "source": "default",
+      "asset_id": "broll_placeholder",
+      "transition": "hard_cut"
+    },
+    {
+      "id": "vis-teacher-close",
+      "action": "show_teacher",
+      "start": 4.5,
+      "end": 8.0,
+      "reason": "SHORT_03 is a completed bounded_card_with_title reference. Its family uses hard cuts and keeps captions up while the picture changes. These clock times are the test timeline, not timestamps copied from that Short.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.6,
+      "source": "inferred",
+      "asset_id": "teacher"
+    },
+    {
+      "id": "title",
+      "action": "title",
+      "start": 0.0,
+      "end": 8.0,
+      "reason": "Card references keep a title above the video region. The words are the test title, not the reference title.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.55,
+      "source": "inferred",
+      "text": "SYNTHETIC PIPELINE TEST"
+    },
+    {
+      "id": "logo",
+      "action": "logo",
+      "start": 0.0,
+      "end": 8.0,
+      "reason": "A logo sits with the title in this family. The file is a generated mark. The reference spelling was uncertain and is not reused.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.3,
+      "source": "default",
+      "asset_id": "logo_placeholder"
+    },
+    {
+      "id": "cap-0",
+      "action": "caption",
+      "start": 0.3,
+      "end": 2.4,
+      "reason": "Caption text is the test transcript. Placement follows the exemplar's lower-card caption, which stayed up across picture changes.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.55,
+      "source": "inferred",
+      "text": "THIS IS A PIPELINE TEST"
+    },
+    {
+      "id": "cap-1",
+      "action": "caption",
+      "start": 2.6,
+      "end": 4.4,
+      "reason": "Caption text is the test transcript. Placement follows the exemplar's lower-card caption, which stayed up across picture changes.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.55,
+      "source": "inferred",
+      "text": "THE PICTURE CHANGES HERE"
+    },
+    {
+      "id": "cap-2",
+      "action": "caption",
+      "start": 4.6,
+      "end": 7.6,
+      "reason": "Caption text is the test transcript. Placement follows the exemplar's lower-card caption, which stayed up across picture changes.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.55,
+      "source": "inferred",
+      "text": "THE VOICE KEEPS GOING"
+    },
+    {
+      "id": "cut-in",
+      "action": "transition",
+      "start": 2.5,
+      "end": 2.53,
+      "reason": "Sampled reference transitions in this family are hard cuts. No frame-accurate transition curve was measured.",
+      "reference_ids": [
+        "SHORT_03"
+      ],
+      "reference_timestamps": [],
+      "confidence": 0.5,
+      "source": "observed",
+      "transition": "hard_cut"
+    }
+  ],
+  "audio": {
+    "preserve_original": true,
+    "narration_path": "assets/narration.wav",
+    "music": {
+      "path": "assets/music_placeholder.wav",
+      "identity": null,
+      "identity_status": "unknown",
+      "source": "default",
+      "gain_under_speech": 0.14,
+      "gain_open": 0.35
+    }
+  },
+  "render": {
+    "width": 720,
+    "height": 1280,
+    "fps": 30
+  },
+  "limitations": [
+    "Music track identity is unknown in the reference dataset and is not invented here.",
+    "The B-roll file is a generated placeholder. No stock URL was selected.",
+    "Teacher-visibility percentages used by the style profile are 1fps estimates.",
+    "No font file was identified. The composition uses the bundled Inter family as a default.",
+    "The input picture and tone are synthetic. This plan does not edit a teacher recording.",
+    "SHORT_30, SHORT_32, and SHORT_37 are partial and were not used to seed this profile."
+  ]
+}

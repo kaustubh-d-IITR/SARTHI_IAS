@@ -1,0 +1,48 @@
+{
+  "manifest_version": "1.0.0",
+  "retrieval_implemented": false,
+  "assets": [
+    {
+      "id": "teacher",
+      "role": "original_camera",
+      "path": "assets/teacher.mp4",
+      "origin": "ffmpeg_lavfi",
+      "rights_status": "synthetic_test_asset",
+      "license_note": "Generated in this workspace for the render test. Not a teacher recording."
+    },
+    {
+      "id": "narration",
+      "role": "original_narration",
+      "path": "assets/narration.wav",
+      "origin": "ffmpeg_lavfi",
+      "rights_status": "synthetic_test_asset",
+      "license_note": "Continuous tone standing in for narration. Not speech from a reference."
+    },
+    {
+      "id": "broll_placeholder",
+      "role": "supporting_visual",
+      "path": "assets/broll.mp4",
+      "origin": "ffmpeg_lavfi",
+      "rights_status": "placeholder_no_licensed_asset",
+      "license_note": "Explanatory color card. No stock URL was chosen or scraped."
+    },
+    {
+      "id": "music_placeholder",
+      "role": "music_bed",
+      "path": "assets/music_placeholder.wav",
+      "origin": "ffmpeg_lavfi",
+      "rights_status": "placeholder_no_licensed_asset",
+      "identity": null,
+      "identity_status": "unknown",
+      "license_note": "Quiet generated tone. Not a song identified in the dataset."
+    },
+    {
+      "id": "logo_placeholder",
+      "role": "logo",
+      "path": "assets/logo.svg",
+      "origin": "generated_svg",
+      "rights_status": "generated_placeholder",
+      "license_note": "Project test mark. The reference logo spelling was not confirmed."
+    }
+  ]
+}

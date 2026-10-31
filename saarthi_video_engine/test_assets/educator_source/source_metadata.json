@@ -1,0 +1,39 @@
+{
+  "page_url": "https://commons.wikimedia.org/wiki/File:Prof_Walter_Lewin_Atwoods_Machine.ogv",
+  "direct_media_url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Prof_Walter_Lewin_Atwoods_Machine.ogv",
+  "creator": "Walter Lewin",
+  "institution": "MIT OpenCourseWare, published on Wikimedia Commons",
+  "title": "Prof. Walter Lewin explains Atwood's machine",
+  "license": "CC BY 3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0",
+  "commons_license_template": "{{cc-by-3.0}}",
+  "permission_ticket": "2011051010013473",
+  "attribution_required": true,
+  "attribution": "Walter Lewin / MIT OpenCourseWare. CC BY 3.0. Adapted excerpt.",
+  "embedded_vorbis_license_tag": "CC BY-NC-SA 3.0 US",
+  "license_note": "The Commons page and the file's wikitext grant CC BY 3.0 and cite VRT ticket 2011051010013473. The Ogg Vorbis comment still says CC BY-NC-SA 3.0 US, which is the tag from the original encode. The VRT email was not opened. This project uses the Commons CC BY 3.0 grant, keeps the embedded tag in this record, and attributes Walter Lewin and MIT OpenCourseWare. The file is a published lecture, not an unedited camera master.",
+  "ocw_course_page": "https://ocw.mit.edu/courses/physics/8-01-physics-i-classical-mechanics-fall-1999/video-lectures/",
+  "parent_archive_tag": "http://www.archive.org/details/MIT8.01F99",
+  "retrieval_date": "2026-10-22",
+  "sha256": "8063c438adf928a22e854e9fc849441a551be6cff3fb7be6613493b44636c61a",
+  "bytes": 32484969,
+  "duration_seconds": 471.0,
+  "video": {
+    "codec": "theora",
+    "width": 400,
+    "height": 300,
+    "fps": "15/1"
+  },
+  "audio": {
+    "codec": "vorbis",
+    "sample_rate": "44100",
+    "channels": 2,
+    "stream_index": 1
+  },
+  "selected_segment": {
+    "source_in": 124.72,
+    "source_out": 184.08,
+    "reason": "Densest 30\u201360 second run of ASR segments, cut on segment boundaries."
+  },
+  "why_selected": "A real lecturer, a direct Commons download, and a CC BY 3.0 grant that allows an adapted excerpt with attribution. The speech is a physics explanation."
+}

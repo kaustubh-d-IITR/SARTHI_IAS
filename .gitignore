@@ -1,0 +1,22 @@
+# Deployment repository for Sarthi IAS Video Studio (Render builds from this root, Vercel from saarthi_video_engine/web).
+# Raw lectures, reference inputs, historical outputs and secrets stay out of version control.
+/*
+!/.gitignore
+!/.dockerignore
+!/render.yaml
+!/LOGO/
+!/OUTRO/
+!/reference_dataset/
+/reference_dataset/*
+!/reference_dataset/shorts_dataset.json
+!/saarthi_video_engine/
+!/analysis_tools/
+__pycache__/
+*.pyc
+
+/saarthi_video_engine/data/
+/saarthi_video_engine/tools/
+.env
+.env.*
+!.env.example
+!.env.*.example

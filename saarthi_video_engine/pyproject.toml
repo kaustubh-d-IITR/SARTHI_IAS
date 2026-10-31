@@ -1,0 +1,12 @@
+[project]
+name = "saarthi-video-engine"
+version = "0.1.0"
+description = "Sarthi AI Studio phase-1 adapter between the reference dataset, an editing plan, and HyperFrames."
+requires-python = ">=3.11"
+dependencies = ["jsonschema>=4.20"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

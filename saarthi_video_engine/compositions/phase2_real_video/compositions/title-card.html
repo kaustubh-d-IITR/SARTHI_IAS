@@ -1,0 +1,26 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #title-text {
+      margin: 0;
+      position: absolute;
+      top: 56px;
+      left: 36px;
+      right: 36px;
+      color: #ffffff;
+      font-family: "Inter", sans-serif;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+  </style>
+  <div id="root" data-composition-id="title-card" data-width="720" data-height="1280">
+    <h1 id="title-text" class="clip" data-start="0" data-duration="59.197" data-track-index="0">FORCES ON THE PULLEY</h1>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#title-text", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 0.1);
+    window.__timelines = window.__timelines || {};
+    window.__timelines["title-card"] = tl;
+  </script>
+</template>

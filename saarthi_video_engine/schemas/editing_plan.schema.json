@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saarthi.local/schemas/editing_plan.schema.json",
+  "title": "Sarthi editing plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "plan_id",
+    "form",
+    "input_media",
+    "content_analysis",
+    "style",
+    "decisions",
+    "audio",
+    "render",
+    "limitations"
+  ],
+  "properties": {
+    "contract_version": { "const": "1.0.0" },
+    "plan_id": { "type": "string", "minLength": 1 },
+    "form": { "enum": ["short", "long"] },
+    "input_media": { "$ref": "#/$defs/input_media" },
+    "content_analysis": { "$ref": "#/$defs/content_analysis" },
+    "style": { "$ref": "#/$defs/style" },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/decision" }
+    },
+    "audio": { "$ref": "#/$defs/audio" },
+    "render": { "$ref": "#/$defs/render" },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "license", "license_url"],
+      "properties": {
+        "text": { "type": "string" },
+        "license": { "type": "string" },
+        "license_url": { "type": "string" },
+        "changes": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "source": { "enum": ["observed", "inferred", "default"] },
+    "input_media": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "video_path",
+        "duration_seconds",
+        "width",
+        "height",
+        "fps",
+        "audio_path",
+        "transcript"
+      ],
+      "properties": {
+        "video_path": { "type": "string", "minLength": 1 },
+        "duration_seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "fps": { "type": "number", "exclusiveMinimum": 0 },
+        "audio_path": { "type": "string", "minLength": 1 },
+        "media_origin": { "enum": ["authorized_local", "synthetic_test"] },
+        "transcript": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["language", "segments"],
+          "properties": {
+            "language": { "type": "string" },
+            "translation_language": { "type": ["string", "null"] },
+            "method": { "type": "string" },
+            "model": { "type": ["string", "null"] },
+            "provenance": { "type": "string" },
+            "segments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["id", "text", "start", "end"],
+                "properties": {
+                  "id": { "type": "string" },
+                  "text": { "type": "string" },
+                  "start": { "type": "number", "minimum": 0 },
+                  "end": { "type": "number", "exclusiveMinimum": 0 },
+                  "original_text": { "type": "string" },
+                  "romanized_text": { "type": "string" },
+                  "english_text": { "type": "string" },
+                  "caption_flags": { "type": "array", "items": { "type": "string" } },
+                  "language": { "type": "string" },
+                  "language_source": { "enum": ["provider", "inferred", "configured"] },
+                  "confidence": { "type": ["number", "null"] },
+                  "timing_precision": { "enum": ["segment", "word"] }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "content_analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_category",
+        "secondary_categories",
+        "topic",
+        "subtopics",
+        "main_message",
+        "narrative_structure",
+        "emotional_tone",
+        "entities",
+        "confidence",
+        "evidence",
+        "source"
+      ],
+      "properties": {
+        "primary_category": { "type": "string" },
+        "secondary_categories": { "type": "array", "items": { "type": "string" } },
+        "topic": { "type": "string" },
+        "subtopics": { "type": "array", "items": { "type": "string" } },
+        "main_message": { "type": "string" },
+        "narrative_structure": { "type": "string" },
+        "emotional_tone": { "type": "string" },
+        "entities": { "type": "array", "items": { "type": "string" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "type": "string" },
+        "source": { "$ref": "#/$defs/source" }
+      }
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exemplar_reference_id", "layout_family", "template_family", "trusted"],
+      "properties": {
+        "exemplar_reference_id": { "type": "string" },
+        "layout_family": {
+          "enum": [
+            "bounded_card_with_title",
+            "full_bleed_board_or_lecture",
+            "split_teacher_and_graphic",
+            "screen_recording_or_product_ui"
+          ]
+        },
+        "template_family": { "type": "string" },
+        "trusted": { "type": "boolean" }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "action",
+        "start",
+        "end",
+        "reason",
+        "reference_ids",
+        "reference_timestamps",
+        "confidence",
+        "source"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "action": {
+          "enum": [
+            "show_teacher",
+            "replace_with_broll",
+            "overlay_broll",
+            "caption",
+            "title",
+            "logo",
+            "transition"
+          ]
+        },
+        "start": { "type": "number", "minimum": 0 },
+        "end": { "type": "number", "exclusiveMinimum": 0 },
+        "reason": { "type": "string" },
+        "reference_ids": { "type": "array", "items": { "type": "string" } },
+        "reference_timestamps": { "type": "array", "items": { "type": "number" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "source": { "$ref": "#/$defs/source" },
+        "text": { "type": "string" },
+        "asset_id": { "type": "string" },
+        "asset_path": { "type": "string" },
+        "asset_kind": { "enum": ["video", "image"] },
+        "transition": { "enum": ["hard_cut", "none"] },
+        "license": { "type": "string" },
+        "license_url": { "type": "string" },
+        "page_url": { "type": "string" },
+        "creator": { "type": "string" },
+        "graphic": { "type": "string" }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preserve_original", "narration_path", "music"],
+      "properties": {
+        "preserve_original": { "const": true },
+        "narration_path": { "type": "string" },
+        "narration_interval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "number", "minimum": 0 },
+            "end": { "type": "number", "exclusiveMinimum": 0 },
+            "source_in": { "type": "number", "minimum": 0 },
+            "source_out": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "music": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "identity",
+            "identity_status",
+            "source",
+            "gain_under_speech",
+            "gain_open"
+          ],
+          "properties": {
+            "path": { "type": ["string", "null"] },
+            "identity": { "type": ["string", "null"] },
+            "identity_status": { "enum": ["unknown", "identified"] },
+            "source": { "enum": ["default", "licensed"] },
+            "gain_under_speech": { "type": "number", "minimum": 0, "maximum": 1 },
+            "gain_open": { "type": "number", "minimum": 0, "maximum": 1 },
+            "license": { "type": "string" },
+            "license_url": { "type": "string" },
+            "page_url": { "type": "string" },
+            "artist": { "type": "string" }
+          }
+        }
+      }
+    },
+    "render": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height", "fps"],
+      "properties": {
+        "width": { "type": "integer" },
+        "height": { "type": "integer" },
+        "fps": { "type": "number" },
+        "object_fit": { "enum": ["cover", "contain"] },
+        "corner_logo": { "type": "string", "minLength": 1 },
+        "grade": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "confidence", "reason"],
+          "properties": {
+            "name": { "enum": ["none", "documentary", "natural", "neutral", "serious"] },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "reason": { "type": "string" },
+            "ffmpeg_video_filter": { "type": ["string", "null"] },
+            "timeline": {
+              "type": "array",
+              "items": { "type": "object" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "teacher": [],
+  "broll": [],
+  "constant": {
+    "contrast": 1.05,
+    "saturation": 1.04,
+    "reason": "The reference teacher stays in natural colour for the whole short. The one monochrome frame is a separate illustrated B-roll still, not a grade on the teacher. A constant five percent contrast and saturation is the only treatment, so the picture never flickers between filters."
+  },
+  "outro": "no lesson grade, caption, logo, title, or red frame"
+}

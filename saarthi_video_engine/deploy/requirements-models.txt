@@ -1,0 +1,6 @@
+# Model worker for Mode B visual analysis (CLIP ViT-B/32) and text similarity (Snowflake arctic-embed-xs).
+# torch comes from the CPU wheel index in the Dockerfile; the worker runs with CUDA disabled.
+transformers==5.17.0
+sentence-transformers==6.0.1
+huggingface-hub==1.33.0
+google-genai==2.33.0

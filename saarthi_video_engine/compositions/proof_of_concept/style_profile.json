@@ -1,0 +1,86 @@
+{
+  "exemplar_reference_id": "SHORT_03",
+  "trusted": true,
+  "layout_family": "bounded_card_with_title",
+  "template_family": "rounded_card_title_header",
+  "peer_count": 19,
+  "excluded_partial_ids": [
+    "SHORT_30",
+    "SHORT_32",
+    "SHORT_37"
+  ],
+  "template_families": {
+    "rounded_card_title_header": 3,
+    "dotted_bg_red_border_card": 1,
+    "persistent title-and-logo card with a rounded talking-head window and karaoke lower-third": 1,
+    "title-and-logo card with talking head, board graphics, and full-card cutaways, ending on a promo card": 1,
+    "single talking-head card with a persistent title and word-by-word yellow captions": 1,
+    "black_canvas_logo_title_rounded_card": 4,
+    "rounded_card_slide_karaoke_endslate": 2,
+    "black_header_rounded_card": 1,
+    "Header-plus-card short with a persistent series title, corner icons, and in-card karaoke captions.": 1,
+    "Talking-head in a red rounded card with a fixed title and corner marks, bottom karaoke caption, hard swaps to full-card footage, then a black end screen.": 1,
+    "top_title_logo_rounded_card": 1,
+    "purple_canvas_title_in_card": 1,
+    "graph_paper_floating_card": 1
+  },
+  "caption": {
+    "position": "lower center inside the rounded card",
+    "style": "white uppercase text on a maroon rounded rectangle",
+    "typical_chunk": "2 to 5 words",
+    "remains_during_broll_count": 7,
+    "remains_during_broll_peer_count": 19,
+    "source": "observed"
+  },
+  "teacher_visibility": {
+    "median_visible_any_percent": 81.2,
+    "confidence": "estimated_from_1fps_samples",
+    "source": "observed"
+  },
+  "transitions": {
+    "top": [
+      [
+        "hard cut",
+        33
+      ],
+      [
+        "observed_note",
+        31
+      ],
+      [
+        "hard cut back",
+        10
+      ],
+      [
+        "hard_cut",
+        8
+      ],
+      [
+        "cutaway",
+        4
+      ]
+    ],
+    "source": "observed",
+    "note": "Types are labels from sampled frames, not frame-accurate effect parameters."
+  },
+  "music": {
+    "identity": null,
+    "identity_status": "unknown",
+    "source": "observed",
+    "note": "No reference was listened to. Do not invent a track title."
+  },
+  "broll": {
+    "source_identified": false,
+    "note": "Descriptions exist. Licensing sources and original URLs do not."
+  },
+  "typography": {
+    "font_file": null,
+    "note": "On-screen lettering was read from frames. No font file was identified."
+  },
+  "observed_canvas": "720x1280 vertical frame on black. A yellow circular logo and a white title sit above a centered rounded-rectangle video card.",
+  "observed_title_position": "top center, to the right of the yellow circular logo",
+  "observed_video_region": "centered rounded rectangle",
+  "observed_logo_position": "yellow circle at the upper left of the title; SARRTHI IAS at the top right inside the card",
+  "logo_text_as_read": "Yellow circle: inner mark looks like a lightbulb; any name inside is [unclear]. Inside the card, top right of the board: SARRTHI IAS",
+  "logo_spelling_needs_confirmation": true
+}

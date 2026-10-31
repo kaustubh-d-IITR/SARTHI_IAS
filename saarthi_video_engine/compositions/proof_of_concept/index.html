@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sarthi proof poc-short_03</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 720px;
+        height: 1280px;
+        overflow: hidden;
+        background: #000000;
+        font-family: "Inter", sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 720px;
+        height: 1280px;
+      }
+      video {
+        position: absolute;
+        object-fit: cover;
+      }
+      
+      #canvas-bg { position: absolute; inset: 0; background: #000; z-index: 0; }
+      #logo-mark { position: absolute; top: 48px; left: 36px; width: 72px; height: 72px; z-index: 6; }
+      #title-block { position: absolute; top: 56px; left: 124px; right: 36px; z-index: 5; }
+      #title-block h1 { margin: 0; color: #ffffff; font-size: 28px; line-height: 1.2; font-weight: 700; }
+      #card {
+        position: absolute; top: 168px; left: 36px; width: 648px; height: 900px;
+        border-radius: 32px; overflow: hidden; z-index: 2;
+        border: 6px solid #ffffff;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      #card video { width: 100%; height: 100%; left: 0; top: 0; }
+      .caption {
+        position: absolute; left: 72px; width: 576px; bottom: 250px; z-index: 6;
+        text-align: center;
+      }
+      .caption span {
+        display: inline-block; color: #ffffff; background: #6b2430;
+        border-radius: 12px; padding: 10px 16px; font-size: 28px; font-weight: 700;
+      }
+    
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-layout-family="bounded_card_with_title"
+      data-start="0"
+      data-duration="8.0"
+      data-width="720"
+      data-height="1280"
+    >
+      <div id="canvas-bg" data-layout-ignore="true"></div>
+      
+      <img id="logo-mark" class="clip" src="assets/logo.svg" alt="" data-layout-ignore="true"
+          data-start="0.0" data-duration="8.0" data-track-index="2" />
+      <div
+        id="title-card"
+        data-composition-id="title-card"
+        data-composition-src="compositions/title-card.html"
+        data-start="0.0"
+        data-duration="8.0"
+        data-width="720"
+        data-height="1280"
+        data-track-index="3"
+        data-track-kind="graphics"
+      ></div>
+    
+      <div id="card" data-layout-allow-overflow="true"><video id="vis-teacher-open" class="clip" src="assets/teacher.mp4" muted playsinline
+              data-start="0.0" data-duration="2.5"
+              data-media-start="0.0" data-track-index="1"></video>
+<video id="vis-broll" class="clip" src="assets/broll.mp4" muted playsinline
+              data-start="2.5" data-duration="2.0"
+              data-media-start="0" data-track-index="1"></video>
+<video id="vis-teacher-close" class="clip" src="assets/teacher.mp4" muted playsinline
+              data-start="4.5" data-duration="3.5"
+              data-media-start="4.5" data-track-index="1"></video></div>
+      <div id="captions-host" data-track-kind="captions"><div id="cap-0" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="0.3" data-duration="2.1" data-track-index="4">
+              <span>THIS IS A PIPELINE TEST</span>
+            </div><div id="cap-1" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="2.6" data-duration="1.8" data-track-index="4">
+              <span>THE PICTURE CHANGES HERE</span>
+            </div><div id="cap-2" class="clip caption" data-layout-allow-caption-zone="true"
+              data-start="4.6" data-duration="3.0" data-track-index="4">
+              <span>THE VOICE KEEPS GOING</span>
+            </div></div>
+      <audio
+        id="narration"
+        class="clip"
+        src="assets/narration.wav"
+        data-start="0"
+        data-duration="8.0"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+      <audio
+        id="music-bed"
+        class="clip"
+        src="assets/music_placeholder.wav"
+        data-start="0"
+        data-duration="8.0"
+        data-track-index="11"
+        data-volume="0.14"
+        data-fade-in="0.2"
+        data-fade-out="0.3"
+        data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0.0,"v":0.35},{"t":0.15,"v":0.35},{"t":0.3,"v":0.14},{"t":2.4,"v":0.14},{"t":2.45,"v":0.35},{"t":2.6,"v":0.14},{"t":2.8,"v":0.35},{"t":4.4,"v":0.14},{"t":4.45,"v":0.35},{"t":4.6,"v":0.14},{"t":4.8,"v":0.35},{"t":7.6,"v":0.14},{"t":8.0,"v":0.35}]}]}'
+      ></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#cap-0 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 0.3);
+      tl.to("#cap-0 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 2.28);
+      tl.set("#cap-0 span", { opacity: 0, visibility: "hidden" }, 2.4);
+      tl.fromTo("#cap-1 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 2.6);
+      tl.to("#cap-1 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 4.28);
+      tl.set("#cap-1 span", { opacity: 0, visibility: "hidden" }, 4.4);
+      tl.fromTo("#cap-2 span", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 4.6);
+      tl.to("#cap-2 span", { opacity: 0, duration: 0.12, ease: "power2.in" }, 7.4799999999999995);
+      tl.set("#cap-2 span", { opacity: 0, visibility: "hidden" }, 7.6);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

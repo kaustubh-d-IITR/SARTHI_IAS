@@ -1,0 +1,25 @@
+{
+  "source_file": "Prof_Walter_Lewin_Atwoods_Machine.ogv",
+  "source_in": 124.72,
+  "source_out": 184.08,
+  "duration_seconds": 59.36,
+  "rendered_narration_seconds": 59.197,
+  "reason": "Densest 30\u201360 second run of ASR segments, cut on segment boundaries.",
+  "segment_ids": [
+    "a17",
+    "a18",
+    "a19",
+    "a20",
+    "a21",
+    "a22",
+    "a23",
+    "a24",
+    "a25",
+    "a26",
+    "a27",
+    "a28"
+  ],
+  "text": "It has a mass, so it is weight mg. The sum of all forces on the pulley must be zero. Otherwise it would accelerate itself down, which it doesn't. And so there has to be a force up, I will call it m. And that force n has to cancel out all these three forces. So that must be t1 plus t2 plus mg. We will not need it any further in our calculations, but there has to be a force to hold that in place. So to speak. So now we're going to calculate the acceleration under a condition that the rope does not slip. That means our friction with the pulley, not friction here. Here, otherwise the rope would slip. The rope would slip. What it means if there is no slip, that if the rope moves one centimeter, that the wheel also turned at the circumference one centimeter, that's what it means when there is no slip.",
+  "picture": "assets/teacher.mp4 in the phase-2 composition, cut from the original",
+  "narration": "assets/narration.wav, the same in and out points, stream 0"
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "sibling",
+    "rejected": "A personal family line is not illustrated with footage of other people."
+  },
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "bhai",
+    "rejected": "A personal family line is not illustrated with footage of other people."
+  },
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "behen",
+    "rejected": "A personal family line is not illustrated with footage of other people."
+  },
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "mistakes",
+    "rejected": "The point is abstract, so the teacher stays on screen."
+  },
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "exam",
+    "rejected": "An unrelated exam-hall clip would not show this sentence."
+  },
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "upsc",
+    "rejected": "The institution name is not a license to show an unrelated building."
+  },
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "syllabus",
+    "rejected": "Syllabus text is usually already on the board."
+  },
+  {
+    "video_id": "VIDEO_1",
+    "kind": "video",
+    "term": "guidance",
+    "rejected": "The point is abstract, so the teacher stays on screen."
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:Local newspapers limit malfeasance.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3ALocal_newspapers_limit_malfeasance.webm",
+    "license": "CC BY-SA 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:National Newspaper Publishers Association Roundtable, 2021-02-04.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3ANational_Newspaper_Publishers_Association_Roundtable%2C_2021-02-04.webm",
+    "license": "Public domain",
+    "rejected": "license url is missing"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:SocialConstructionOfCrime2022-05-22a.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3ASocialConstructionOfCrime2022-05-22a.webm",
+    "license": "CC BY-SA 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:The 910 ton printing presses at the Las Vegas Review-Journal were the largest in the world when installed in 2000.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3AThe_910_ton_printing_presses_at_the_Las_Vegas_Review-Journal_were_the_largest_in_the_world_when_installed_in_2000.webm",
+    "license": "CC BY 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:Vulture capitalists destroying newspapers.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3AVulture_capitalists_destroying_newspapers.webm",
+    "license": "CC BY-SA 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:Baby Globe reading newspaper.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3ABaby_Globe_reading_newspaper.webm",
+    "license": "CC BY-SA 4.0",
+    "rejected": "description points at a different subject from the spoken query"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:European Balcony Project - Declaration of the European Republic - Reading of the Manifesto at Rotes Rathaus 10 November 2018 16 00.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3AEuropean_Balcony_Project_-_Declaration_of_the_European_Republic_-_Reading_of_the_Manifesto_at_Rotes_Rathaus_10_November_2018_16_00.webm",
+    "license": "CC BY-SA 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:SocialConstructionOfCrime2022-05-22a.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3ASocialConstructionOfCrime2022-05-22a.webm",
+    "license": "CC BY-SA 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:The 910 ton printing presses at the Las Vegas Review-Journal were the largest in the world when installed in 2000.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3AThe_910_ton_printing_presses_at_the_Las_Vegas_Review-Journal_were_the_largest_in_the_world_when_installed_in_2000.webm",
+    "license": "CC BY 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "query": "newspaper",
+    "kind": "video",
+    "title": "File:Vulture capitalists destroying newspapers.webm",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3AVulture_capitalists_destroying_newspapers.webm",
+    "license": "CC BY-SA 4.0",
+    "rejected": "video is over 40 MB"
+  },
+  {
+    "video_id": "VIDEO_2",
+    "kind": "video",
+    "term": "youtube",
+    "rejected": "YouTube is a platform name. An ordinary YouTube video is not downloaded or reused."
+  },
+  {
+    "video_id": "VIDEO_2",
+    "kind": "video",
+    "term": "advice",
+    "rejected": "The point is abstract, so the teacher stays on screen."
+  },
+  {
+    "title": "File:Inspire Action by Yuri Megis.ogg",
+    "page_url": "https://commons.wikimedia.org/wiki/File%3AInspire_Action_by_Yuri_Megis.ogg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Inspire_Action_by_Yuri_Megis.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "mime": "application/ogg",
+    "size": 2059217,
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "artist": "Yuri Megis",
+    "description": "This track is designed for a modern corporate environment – calm, light, and motivating. Perfect as background music for presentations, videos, advertisements, office projects, and online content. Soft piano and warm guitar chords create an atmosphere of productivity, positivity, and professional harmony.Use this track for:Corporate videos and presentationsOnline courses and educational projectsCommercials and media contentWork or creative backgroundIdeal for anyone looking for light, modern, and inspiring background music[/b]. Suitable for both commercial and non-commercial projects. Inspire Action by Yuri Megis",
+    "query": "soft piano instrumental",
+    "kind": "audio",
+    "local_path": "C:\\Users\\shubh\\OneDrive\\Desktop\\SAARTHI IAS\\saarthi_video_engine\\outputs\\dr_shivin_phase5\\asset_cache\\inspire-action-yuri-megis.ogg",
+    "rejected": null,
+    "bytes": 2059217,
+    "duration_seconds": 93.64,
+    "reused_from": "phase 4 licensed instrumental; not a second download"
+  }
+]

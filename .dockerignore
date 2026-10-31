@@ -1,0 +1,24 @@
+# Build context for saarthi_video_engine/deploy/*.Dockerfile. Only what the images copy is sent.
+# Raw lectures, historical outputs, uploads, virtualenvs and .env files never enter an image.
+*
+!LOGO/
+!OUTRO/
+!reference_dataset/shorts_dataset.json
+!saarthi_video_engine/api/
+!saarthi_video_engine/configs/
+!saarthi_video_engine/schemas/
+!saarthi_video_engine/src/
+!saarthi_video_engine/deploy/
+!saarthi_video_engine/run_phase4.py
+!saarthi_video_engine/run_phase5.py
+!saarthi_video_engine/outputs/dr_shivin_phase5/asset_cache/candidates.json
+!saarthi_video_engine/outputs/dr_shivin_phase5/asset_cache/inspire-action-yuri-megis.ogg
+
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.env
+**/.env.*
+saarthi_video_engine/api/.venv
+saarthi_video_engine/api/tests
+saarthi_video_engine/api/data

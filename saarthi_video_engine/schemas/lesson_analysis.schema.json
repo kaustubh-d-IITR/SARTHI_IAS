@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saarthi.local/schemas/lesson_analysis.schema.json",
+  "title": "Sarthi lesson analysis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "video_id", "source", "transcription", "timeline", "broll_target", "coverage"],
+  "properties": {
+    "contract_version": { "const": "1.0.0" },
+    "video_id": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "duration_seconds"],
+      "properties": {
+        "path": { "type": "string" },
+        "duration_seconds": { "type": ["number", "null"] },
+        "width": { "type": ["integer", "null"] },
+        "height": { "type": ["integer", "null"] }
+      }
+    },
+    "transcription": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "language", "confidence_note"],
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": ["string", "null"] },
+        "endpoint": { "type": ["string", "null"] },
+        "language": { "type": ["string", "null"] },
+        "language_probability": { "type": ["number", "null"] },
+        "confidence_note": { "type": "string" }
+      }
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "start", "end", "spoken_wording", "words", "broll"],
+        "properties": {
+          "id": { "type": "string" },
+          "start": { "type": "number" },
+          "end": { "type": "number" },
+          "spoken_wording": { "type": "string" },
+          "words": { "type": "array" },
+          "review_flags": { "type": "array", "items": { "type": "string" } },
+          "teacher_visibility": { "type": "string" },
+          "visual_observation": { "type": "string" },
+          "visual_observation_confidence": { "type": "string" },
+          "concept": { "type": ["string", "null"] },
+          "broll": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "appropriate",
+              "reason",
+              "queries",
+              "proposed_start",
+              "proposed_end",
+              "placement",
+              "transition",
+              "negation",
+              "slot_planned",
+              "candidates",
+              "downloaded",
+              "approved",
+              "rendered",
+              "failure_reason"
+            ],
+            "properties": {
+              "appropriate": { "type": "boolean" },
+              "reason": { "type": "string" },
+              "queries": { "type": "array", "items": { "type": "string" } },
+              "proposed_start": { "type": "number" },
+              "proposed_end": { "type": "number" },
+              "placement": { "enum": ["replace_with_broll", "show_teacher"] },
+              "transition": { "type": "string" },
+              "negation": { "type": "boolean" },
+              "slot_planned": { "type": "boolean" },
+              "candidates": { "type": "array" },
+              "downloaded": { "type": "boolean" },
+              "approved": { "type": "boolean" },
+              "rendered": { "type": "boolean" },
+              "failure_reason": { "type": ["string", "null"] }
+            }
+          }
+        }
+      }
+    },
+    "broll_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["low", "high", "basis"],
+      "properties": {
+        "low": { "const": 0.3 },
+        "high": { "const": 0.4 },
+        "basis": { "type": "string" }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planned_seconds", "rendered_seconds", "rendered_fraction"],
+      "properties": {
+        "planned_seconds": { "type": "number" },
+        "rendered_seconds": { "type": "number" },
+        "lesson_seconds": { "type": ["number", "null"] },
+        "rendered_fraction": { "type": "number" },
+        "shortfall_reason": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
