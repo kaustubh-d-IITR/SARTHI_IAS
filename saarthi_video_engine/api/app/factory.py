@@ -15,7 +15,7 @@ from pydantic import BaseModel, Field
 
 from app import auth, jobqueue
 from app.config import ALLOWED_EXTENSIONS, Settings
-from app.db import get_engine, migrate
+from app.db import get_engine, migrate, schema_state
 from app.errors import StudioError
 from app.logs import bind, configure_logging, log_context
 from app.media_probe import resolve_ffprobe
@@ -208,9 +208,7 @@ def create_app(
     def ready() -> JSONResponse:
         checks: dict[str, dict] = {}
         try:
-            with db.connect() as conn:
-                conn.exec_driver_sql("SELECT 1")
-            checks["database"] = {"ok": True}
+            checks["database"] = schema_state(db)
         except Exception as exc:  # noqa: BLE001
             checks["database"] = {"ok": False, "detail": type(exc).__name__}
         ok, detail = store.objects.ping()

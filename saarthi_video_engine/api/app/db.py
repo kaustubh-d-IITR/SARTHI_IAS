@@ -202,18 +202,53 @@ def get_engine(url: str) -> Engine:
     return _ENGINES[url]
 
 
-def migrate(url: str) -> None:
-    """Upgrade the database to the latest Alembic revision."""
-    from alembic import command
+def _alembic_config(url: str | None = None):
     from alembic.config import Config
 
-    if url.startswith("sqlite:///"):
-        Path(url[len("sqlite:///"):]).parent.mkdir(parents=True, exist_ok=True)
     api_root = Path(__file__).resolve().parents[1]
     config = Config(str(api_root / "alembic.ini"))
     config.set_main_option("script_location", str(api_root / "migrations"))
-    config.set_main_option("sqlalchemy.url", url)
-    command.upgrade(config, "head")
+    if url is not None:
+        # ConfigParser treats % as interpolation; URL-encoded passwords contain it.
+        config.set_main_option("sqlalchemy.url", url.replace("%", "%%"))
+    return config
+
+
+def migrate(url: str) -> None:
+    """Upgrade the database to the latest Alembic revision."""
+    from alembic import command
+
+    if url.startswith("sqlite:///"):
+        Path(url[len("sqlite:///"):]).parent.mkdir(parents=True, exist_ok=True)
+    command.upgrade(_alembic_config(url), "head")
+
+
+def head_revision() -> str:
+    from alembic.script import ScriptDirectory
+
+    return ScriptDirectory.from_config(_alembic_config()).get_current_head()
+
+
+def schema_state(db: Engine) -> dict:
+    """Where the database is against the code, read without changing anything."""
+    from sqlalchemy import inspect, text
+
+    with db.connect() as conn:
+        tables = set(inspect(conn).get_table_names())
+        revision = conn.execute(text("SELECT version_num FROM alembic_version")).scalar() if "alembic_version" in tables else None
+    head = head_revision()
+    missing = sorted(set(metadata.tables) - tables)
+    return {"ok": revision == head and not missing, "revision": revision, "head": head, "missing_tables": missing}
+
+
+def database_label(url: str) -> str:
+    """Host, port, and database name for logs. Never the user or password."""
+    from sqlalchemy.engine import make_url
+
+    parsed = make_url(url)
+    if parsed.get_backend_name() == "sqlite":
+        return f"sqlite:{Path(parsed.database or '').name}"
+    return f"{parsed.get_backend_name()}://{parsed.host}:{parsed.port or 5432}/{parsed.database}"
 
 
 def as_utc(value: datetime | None) -> datetime | None:

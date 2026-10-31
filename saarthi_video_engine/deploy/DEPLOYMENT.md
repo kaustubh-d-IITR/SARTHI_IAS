@@ -76,9 +76,11 @@ python -m app.cli create-user --email <owner-chosen address> --name "<name>"
 | --- | --- | --- | --- |
 | API | `deploy/api.Dockerfile`, context = repository root | `uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers` | `/api/live` (Render's check); `/api/ready` for monitoring |
 | Worker | `deploy/worker.Dockerfile`, context = repository root | `python -m app.worker` | Heartbeat row in `workers`; `/api/ready` reports it |
-| Migrations | in the API image | `python -m app.cli migrate` (pre-deploy) | `alembic_version` = `0001_initial` |
+| Migrations | in the API image | `python -m app.cli migrate` (pre-deploy; exits 1 unless every table exists at the head revision) | `python -m app.cli check-schema` prints the revision; head is `0002_repair_missing_tables` |
 
-Render's health check uses `/api/live` on purpose: `/api/ready` returns 503 while the worker is down, and that should not stop the API from serving sign-in and review.
+Render's health check uses `/api/live` on purpose: `/api/ready` returns 503 while the worker is down or the schema is behind the code, and that should not stop the API from serving sign-in and review.
+
+Only the API migrates. The worker does not: on start it waits up to `STUDIO_SCHEMA_WAIT_SECONDS` (600 by default) for the database to reach the head revision, logging `waiting for database migrations` with the database host and name, then registers and polls. If the schema never arrives it exits with a message naming the database, which usually means the API and worker have different `DATABASE_URL` values.
 
 ## 5. Vercel
 

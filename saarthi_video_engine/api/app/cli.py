@@ -1,6 +1,7 @@
 """Owner commands. Passwords are typed at a prompt; they are never arguments or log lines.
 
     python -m app.cli migrate
+    python -m app.cli check-schema
     python -m app.cli create-user --email manager@example.org --name "Manager"
     python -m app.cli set-password --email manager@example.org
     python -m app.cli disable-user --email manager@example.org
@@ -15,7 +16,7 @@ import sys
 
 from app.auth import create_user, set_active, set_password
 from app.config import Settings
-from app.db import get_engine, migrate
+from app.db import database_label, get_engine, migrate, schema_state
 from app.errors import StudioError
 
 
@@ -31,6 +32,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("migrate")
+    sub.add_parser("check-schema")
     for name in ("create-user", "set-password", "disable-user", "enable-user"):
         command = sub.add_parser(name)
         command.add_argument("--email", required=True)
@@ -39,10 +41,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     settings = Settings.from_env()
     url = settings.resolved_database_url
-    if args.command == "migrate":
-        migrate(url)
-        print("Database is at the latest migration.")
-        return 0
+    if args.command in ("migrate", "check-schema"):
+        if args.command == "migrate":
+            migrate(url)
+        state = schema_state(get_engine(url))
+        print(f"Database {database_label(url)}: revision {state['revision']}, code expects {state['head']}, missing tables {state['missing_tables'] or 'none'}.")
+        return 0 if state["ok"] else 1
     if settings.auto_migrate:
         migrate(url)
     db = get_engine(url)

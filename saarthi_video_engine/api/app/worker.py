@@ -29,7 +29,7 @@ from sqlalchemy import insert, select, update
 
 from app import jobqueue
 from app.config import Settings
-from app.db import plan_versions, renders, utcnow
+from app.db import database_label, plan_versions, renders, schema_state, utcnow
 from app.errors import StudioError
 from app.logs import configure_logging, log_context
 from app.processing.jobs import Services, _fail, queue_processing, run_processing
@@ -334,6 +334,34 @@ def recover_inline(store: StudioStore) -> None:
 # --------------------------------------------------------------------------- main loop
 
 
+def wait_for_schema(store: StudioStore, timeout: float, interval: float = 10, sleep=time.sleep) -> dict:
+    """Block until the database is at the code's migration head; the API's pre-deploy migrate gets it there.
+
+    The worker never migrates in production (one migrator only). If the schema does not
+    arrive within timeout, exit with a message naming the database instead of crashing
+    later on a missing table.
+    """
+    label = database_label(store.settings.resolved_database_url)
+    deadline = time.monotonic() + timeout
+    while True:
+        try:
+            state = schema_state(store.db)
+        except Exception as exc:  # noqa: BLE001 - an unreachable database is reported the same way
+            state = {"ok": False, "error": type(exc).__name__}
+        if state["ok"]:
+            log.info("database schema ready", extra={"database": label, "revision": state["revision"]})
+            return state
+        if time.monotonic() >= deadline:
+            log.error("database schema not ready", extra={"database": label, **state})
+            raise SystemExit(
+                f"The database {label} is not at migration {state.get('head')} (found {state.get('revision')}, "
+                f"missing tables {state.get('missing_tables')}). Run `python -m app.cli migrate` on the API service "
+                "against this same DATABASE_URL, then restart the worker."
+            )
+        log.warning("waiting for database migrations", extra={"database": label, **state})
+        sleep(interval)
+
+
 def main() -> int:
     configure_logging()
     settings = Settings.from_env()
@@ -342,6 +370,7 @@ def main() -> int:
         from app.db import migrate
 
         migrate(settings.resolved_database_url)
+    wait_for_schema(store, float(os.environ.get("STUDIO_SCHEMA_WAIT_SECONDS") or 600))
     store.ensure()
     services = Services()
     bridge = EngineBridge()
