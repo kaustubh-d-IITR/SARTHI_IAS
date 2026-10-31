@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from app.errors import StudioError
+from app.services.rendering import studio as studio_prep
 from app.services.rendering.bridge import OPEN, UNDER_SPEECH, EngineBridge, EngineFailure
 from app.storage import StudioStore
 
@@ -268,7 +269,7 @@ def timeline_changes(approved: dict, rendered: dict) -> list[str]:
     return changes
 
 
-def composition_checks(html: str, duration: float) -> list[str]:
+def composition_checks(html: str, duration: float, music_required: bool = True) -> list[str]:
     errors = []
     videos = re.findall(r"<video\b[^>]*>", html)
     if any(" muted" not in tag for tag in videos):
@@ -278,7 +279,7 @@ def composition_checks(html: str, duration: float) -> list[str]:
         errors.append("the composition must have exactly one narration track")
     elif 'data-start="0"' not in narration[0] or f'data-duration="{duration}"' not in narration[0]:
         errors.append("narration does not span the lesson from 0")
-    if 'id="music-bed"' not in html:
+    if music_required and 'id="music-bed"' not in html:
         errors.append("the music bed is missing")
     if 'id="corner-logo"' not in html:
         errors.append("the corner logo is missing")
@@ -298,6 +299,40 @@ def _music_plan(row: dict) -> dict:
         "page_url": row.get("page_url"),
         "artist": row.get("artist") or "",
     }
+
+
+def choose_music(store: StudioStore, record: dict, settings: dict | None, bridge: EngineBridge) -> tuple[Path | None, dict]:
+    """The track this version asked for. Without settings it is the licensed default, as before."""
+    source = (settings or {}).get("music", {}).get("source") or "default"
+    if source == "library":
+        from app.services.music import library_track
+
+        track = library_track(settings["music"]["track_id"])
+        return Path(track["file"]), {"title": track["title"], "license": track.get("license"), "license_url": track.get("license_url"), "page_url": track.get("page_url"), "artist": track.get("artist"), "kind": "library", "track_id": track["track_id"]}
+    if source == "upload":
+        meta = store.get_upload(settings["music"]["upload_id"], record["client_id"])
+        if meta.get("kind") != "music" or meta.get("validation_status") != "valid":
+            raise RenderError("The selected music upload is not a validated audio file.")
+        return store.media_file(meta["upload_id"]), {"title": meta.get("filename"), "kind": "upload", "upload_id": meta["upload_id"]}
+    if source == "none":
+        return None, {"title": None, "kind": "none"}
+    path, row = bridge.music()
+    return path, {**row, "kind": "default"}
+
+
+def studio_music_plan(row: dict, music: dict) -> tuple[dict, dict]:
+    """Schema-valid music entry plus the fades. Uploaded music carries no claimed identity or licence."""
+    volume = float(music["volume"])
+    under = round(min(1.0, float(music["under_speech"]) * volume), 4)
+    open_level = round(min(1.0, float(music["in_pauses"]) * volume), 4) if music["ducking"] else under
+    if row["kind"] in {"default", "library"}:
+        plan = _music_plan(row)
+        plan = {key: value for key, value in plan.items() if value is not None}
+    else:
+        plan = {"path": "assets/music.wav", "identity": None, "identity_status": "unknown", "source": "default"}
+    plan.update({"gain_under_speech": under, "gain_open": open_level})
+    extras = {"fade_in": float(music["fade_in"]), "fade_out": 0.05 if music["into_outro"] else float(music["fade_out"]), "label": row.get("title") or "", "kind": row["kind"]}
+    return plan, extras
 
 
 def _cleanup(root: Path) -> None:
@@ -320,6 +355,7 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
         _dump(root / "logs" / "steps.json", steps)
 
     saved = load_approved(store, record, plan_version_id)
+    settings = saved.get("settings")
     plan_version = saved.get("version_id") or "legacy"
     title_decision = next((item for item in saved["engine_plan"].get("decisions") or [] if item.get("action") == "title"), {})
     title = {"text": title_decision.get("text", ""), "status": (saved.get("title") or {}).get("status") or ("legacy" if plan_version == "legacy" else "none")}
@@ -344,7 +380,7 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
 
     logo = bridge.logo_path()
     outro = bridge.outro_path()
-    music_path, music_row = bridge.music()
+    music_path, music_row = choose_music(store, record, settings, bridge)
     manifest = {
         "session_id": session_id,
         "render_id": render_id,
@@ -363,7 +399,8 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
         ],
         "logo": {"filename": logo.name, "sha256": _sha256(logo)},
         "outro": {"filename": outro.name, "sha256": _sha256(outro)},
-        "music": {"identity": music_row.get("title"), "license": music_row.get("license"), "page_url": music_row.get("page_url"), "sha256": _sha256(music_path)},
+        "music": {"identity": music_row.get("title"), "kind": music_row.get("kind"), "license": music_row.get("license"), "page_url": music_row.get("page_url"), "sha256": _sha256(music_path) if music_path else None},
+        "settings": settings,
         "renderer": "existing engine: hyperframes_adapter.compose, run_phase4._hyperframes (hyperframes@0.8.186), render.outro.append_outro",
         "plan_validation": (saved.get("studio") or {}).get("validation"),
         "plan_version_id": plan_version,
@@ -390,7 +427,11 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
     bridge.cut_teacher(inputs["raw"], cut, assets / "teacher.mp4", video_filter)
     bridge.cut_narration(inputs["raw"], cut, assets / "narration.wav")
     bridge.trim_logo(logo, assets / "logo.png")
-    bridge.trim_music(music_path, assets / "music.wav", duration)
+    if music_path is not None:
+        if settings:
+            studio_prep.prepare_music(music_path, assets / "music.wav", duration, bridge.ffmpeg())
+        else:
+            bridge.trim_music(music_path, assets / "music.wav", duration)
     step("lesson media cut", source_in=source_in, source_out=source_out)
 
     teacher_video, _ = _streams(_probe_media(bridge, assets / "teacher.mp4", "cut lesson picture"))
@@ -406,9 +447,16 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
     plan["render"]["object_fit"] = "cover" if portrait else "contain"
     plan["render"]["corner_logo"] = "assets/logo.png"
     plan["audio"]["music"] = _music_plan(music_row)
-    plan["limitations"] = [
-        line for line in plan.get("limitations") or [] if not line.startswith("No music bed is used")
-    ] + ["The music bed is the licensed instrumental already used by the phase 5 renders, at 0.12 under speech and 0.28 in the open."]
+    music_note = "The music bed is the licensed instrumental already used by the phase 5 renders, at 0.12 under speech and 0.28 in the open."
+    music_extras: dict = {}
+    if settings:
+        if music_path is None:
+            plan["audio"]["music"] = {"path": None, "identity": None, "identity_status": "unknown", "source": "default", "gain_under_speech": 0.0, "gain_open": 0.0}
+            music_note = "No music bed: the user chose no music."
+        else:
+            plan["audio"]["music"], music_extras = studio_music_plan(music_row, settings["music"])
+            music_note = f"Music: {music_row.get('title') or 'uploaded track'} ({music_row['kind']}), {plan['audio']['music']['gain_under_speech']} under speech and {plan['audio']['music']['gain_open']} in pauses."
+    plan["limitations"] = [line for line in plan.get("limitations") or [] if not line.startswith("No music bed is used")] + [music_note]
 
     used = []
     broll_index = 0
@@ -460,11 +508,27 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
     if errors:
         raise RenderError("The render-ready plan failed validation: " + "; ".join(errors[:5]))
 
+    if settings:
+        ffmpeg = bridge.ffmpeg()
+        focus = studio_prep.estimate_focus(assets / "teacher.mp4", width, height, ffmpeg)
+        backdrop = studio_prep.make_backdrop(assets / "teacher.mp4", assets / "teacher_backdrop.jpg", CANVAS["width"], CANVAS["height"], duration * 0.35, ffmpeg)
+        sizes = {}
+        for decision in plan["decisions"]:
+            if decision.get("action") == "replace_with_broll" and decision.get("asset_path"):
+                stream, _ = _streams(_probe_media(bridge, composition / decision["asset_path"], "prepared cutaway"))
+                sizes[decision["asset_path"]] = (int(stream["width"]), int(stream["height"]))
+        studio_layout = studio_prep.studio_block(settings, src_width=width, src_height=height, focus=focus, backdrop=f"assets/{backdrop.name}", broll_sizes=sizes)
+        studio_layout["music"] = music_extras
+        _dump(root / "studio_layout.json", studio_layout)
+        step("studio layout measured", focus=focus, framing=settings["framing"], effects=sorted(studio_layout["effects"]))
+    else:
+        studio_layout = None
+
     stage("composing", "Writing the HyperFrames composition.")
-    bridge.compose(plan, composition / "index.html")
+    bridge.compose(plan, composition / "index.html", studio=studio_layout)
     _dump(root / "render_plan.json", plan)
     html = (composition / "index.html").read_text(encoding="utf-8")
-    problems = composition_checks(html, plan["input_media"]["duration_seconds"])
+    problems = composition_checks(html, plan["input_media"]["duration_seconds"], music_required=music_path is not None)
     if problems:
         raise RenderError("The composition failed its audio and branding checks: " + "; ".join(problems))
     step("composition written")
@@ -497,7 +561,16 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
 
     stage("assembling_outro", "Appending the original outro and checking the finished file.")
     final = root / "final.mp4"
-    report = bridge.append_outro(lesson, outro, final)
+    if settings:
+        tail = None
+        if music_path is not None and settings["music"]["into_outro"]:
+            tail = studio_prep.music_tail(
+                music_path, assets / "music_tail.wav", duration, bridge.outro_seconds(outro),
+                float(plan["audio"]["music"]["gain_open"]), float(settings["music"]["fade_out"]), bridge.ffmpeg(),
+            )
+        report = bridge.append_outro(lesson, outro, final, fill=settings["outro"]["fill"], audio=tail)
+    else:
+        report = bridge.append_outro(lesson, outro, final)
     report = {key: value for key, value in report.items() if key != "outro_path"}
     report["outro_filename"] = outro.name
     _dump(root / "outro.json", report)
@@ -515,6 +588,19 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
     if audio["status"] != "passed":
         raise RenderError(f"Narration correlation in the finished video is {final_audio['correlation']}.")
     step("final verified", correlation=final_audio["correlation"])
+
+    stage("verifying", "Inspecting the finished video.")
+    from app.services.rendering.quality import inspect
+
+    quality = inspect(
+        ffmpeg=bridge.ffmpeg(), final=final, final_meta=final_meta, lesson_seconds=duration, plan=plan,
+        assets=assets, settings=settings, outro_report=report,
+    )
+    _dump(root / "quality_report.json", quality)
+    if quality["status"] == "failed":
+        problems = "; ".join(item["detail"] for item in quality["checks"] if item["status"] == "failed")
+        raise RenderError(f"The finished video failed its quality checks: {problems[:300]}")
+    step("quality inspected", status=quality["status"], warnings=quality["warnings"])
 
     result = {
         "render_id": render_id,
@@ -539,6 +625,8 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
             "audio_policy": report.get("audio_policy"),
         },
         "approved_broll_placements": len(used),
+        "quality": {"status": quality["status"], "failed": quality["failed"], "warnings": quality["warnings"], "checks": [{key: item[key] for key in ("name", "status", "detail")} for item in quality["checks"]]},
+        "studio_settings": bool(settings),
         "plan_version_id": plan_version,
         "title": title,
         "mode": record["mode"],

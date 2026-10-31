@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus, Trash2 } from "lucide-react";
 import { MediaFacts } from "../components/MediaFacts";
@@ -9,6 +9,18 @@ import { createSession, deleteUpload, uploadFile } from "../lib/api";
 import { formatBytes, formatDuration } from "../lib/format";
 import { canPrepareBroll } from "../lib/sessionGate";
 import type { BrollDraft, MediaRecord } from "../types";
+
+function ClipPreview({ file, label }: { file: File; label: string }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof URL.createObjectURL !== "function") return;
+    const created = URL.createObjectURL(file);
+    setUrl(created);
+    return () => URL.revokeObjectURL(created);
+  }, [file]);
+  if (!url) return null;
+  return <video className="mt-3 h-36 rounded-xl bg-black" src={url} controls muted playsInline preload="metadata" aria-label={label} />;
+}
 
 function blankEntry(): BrollDraft {
   return {
@@ -36,6 +48,16 @@ export function MyBrollPage() {
   const sessionLimit = health ? formatBytes(health.configuration.max_session_bytes) : "the server limit";
   const ready = canPrepareBroll(raw?.upload_id ?? null, entries, busy);
   const uploadedBytes = (raw?.size_bytes ?? 0) + entries.reduce((sum, entry) => sum + (entry.upload?.size_bytes ?? 0), 0);
+
+  function moveEntry(index: number, delta: number) {
+    setEntries((current) => {
+      const next = [...current];
+      const target = index + delta;
+      if (target < 0 || target >= next.length) return current;
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
+  }
 
   function patch(key: string, next: Partial<BrollDraft>) {
     setEntries((current) => current.map((entry) => (entry.key === key ? { ...entry, ...next } : entry)));
@@ -183,6 +205,14 @@ export function MyBrollPage() {
               <article key={entry.key} className="rounded-2xl border border-line p-4">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="font-medium">B-roll {number}</h3>
+                  <span className="ml-auto flex gap-1">
+                    <button type="button" className="rounded-full border border-line px-2 py-0.5 text-xs disabled:opacity-30" aria-label={`Move B-roll ${number} up`} disabled={busy || index === 0} onClick={() => moveEntry(index, -1)}>
+                      ↑
+                    </button>
+                    <button type="button" className="rounded-full border border-line px-2 py-0.5 text-xs disabled:opacity-30" aria-label={`Move B-roll ${number} down`} disabled={busy || index === entries.length - 1} onClick={() => moveEntry(index, 1)}>
+                      ↓
+                    </button>
+                  </span>
                   <button
                     type="button"
                     className="inline-flex items-center gap-1 text-sm text-red-700"
@@ -224,6 +254,7 @@ export function MyBrollPage() {
                     Upload clip
                   </button>
                 )}
+                {entry.file && <ClipPreview file={entry.file} label={`Preview of B-roll ${number}`} />}
                 <div className="mt-3">
                   <MediaFacts record={entry.upload} progress={entry.progress} />
                 </div>

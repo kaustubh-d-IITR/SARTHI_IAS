@@ -9,6 +9,8 @@ from transcription.captions import caption_pieces, prepare_segment
 from .segment import shift_segments
 
 BROLL_CAP = 0.58
+# Shortest cutaway the builder keeps. Callers that place back-to-back phrase cuts may pass less.
+MIN_CUTAWAY = 2.0
 
 
 def build_phase2_plan(
@@ -25,6 +27,8 @@ def build_phase2_plan(
     secondary_categories: list[str] | None = None,
     music: dict | None = None,
     grade: dict | None = None,
+    min_cutaway: float = MIN_CUTAWAY,
+    caption_max_words: int = 3,
 ) -> dict:
     profile = style_profile(dataset, exemplar_id)
     local_segments = shift_segments(
@@ -71,7 +75,7 @@ def build_phase2_plan(
                 "timing_precision": segment.get("timing_precision") or "segment",
             }
         )
-        pieces_by_id[segment["id"]] = caption_pieces(segment, prepared) if shown else []
+        pieces_by_id[segment["id"]] = caption_pieces(segment, prepared, caption_max_words) if shown else []
     refs = [exemplar_id]
     neighbors = [
         hit["reference_id"]
@@ -84,7 +88,7 @@ def build_phase2_plan(
         )
         if hit["reference_id"] != exemplar_id
     ]
-    visual = _visual_decisions(duration, stored, assets, refs)
+    visual = _visual_decisions(duration, stored, assets, refs, min_cutaway)
     title_text = _title(_title_source(stored, selection["text"], language))
     decisions = visual + [
         _decision(
@@ -262,15 +266,15 @@ def _caption_reason(language: str) -> str:
     )
 
 
-def _visual_decisions(duration: float, segments: list[dict], assets: list[dict], refs: list[str]) -> list[dict]:
+def _visual_decisions(duration: float, segments: list[dict], assets: list[dict], refs: list[str], min_cutaway: float = 2.0) -> list[dict]:
     replacements = []
     for asset in assets:
-        window = _window_for_asset(segments, asset)
+        window = _window_for_asset(segments, asset, min_cutaway)
         if window is None:
             continue
         replacements.append((window[0], window[1], asset))
     replacements.sort()
-    merged = _cap_windows(_merge_windows(replacements), duration)
+    merged = _cap_windows(_merge_windows(replacements), duration, min_cutaway)
     decisions = []
     cursor = 0.0
     for index, (start, end, asset) in enumerate(merged):
@@ -349,7 +353,7 @@ def _broll_decision(index: int, start: float, end: float, asset: dict, refs: lis
     )
 
 
-def _window_for_asset(segments: list[dict], asset: dict) -> tuple[float, float] | None:
+def _window_for_asset(segments: list[dict], asset: dict, min_cutaway: float = 2.0) -> tuple[float, float] | None:
     preset = asset.get("window")
     if isinstance(preset, (list, tuple)) and len(preset) == 2:
         start = float(preset[0])
@@ -379,7 +383,7 @@ def _window_for_asset(segments: list[dict], asset: dict) -> tuple[float, float] 
     span = asset.get("duration_seconds")
     if isinstance(span, (int, float)) and span > 0:
         end = min(end, start + float(span))
-    if end - start < 2.0:
+    if end - start < min_cutaway:
         return None
     return start, end
 
@@ -393,17 +397,17 @@ def _merge_windows(windows: list[tuple[float, float, dict]]) -> list[tuple[float
     return merged
 
 
-def _cap_windows(windows: list[tuple[float, float, dict]], duration: float) -> list[tuple[float, float, dict]]:
+def _cap_windows(windows: list[tuple[float, float, dict]], duration: float, min_cutaway: float = 2.0) -> list[tuple[float, float, dict]]:
     budget = duration * BROLL_CAP
     kept = []
     used = 0.0
     for start, end, asset in windows:
         room = budget - used
-        if room < 2.0:
+        if room < min_cutaway:
             break
         if end - start > room:
             end = start + room
-        if end - start < 2.0:
+        if end - start < min_cutaway:
             continue
         kept.append((round(start, 3), round(end, 3), asset))
         used += end - start

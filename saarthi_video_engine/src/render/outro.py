@@ -27,8 +27,17 @@ def fitted_size(src_w: int, src_h: int, canvas_w: int, canvas_h: int) -> tuple[i
     return width, height
 
 
-def outro_filter(src_w: int, src_h: int, canvas_w: int, canvas_h: int, fps: int = 30) -> str:
+def outro_filter(src_w: int, src_h: int, canvas_w: int, canvas_h: int, fps: int = 30, fill: str = "black") -> str:
+    """Fit the outro inside the canvas without stretching. fill="blur" puts a blurred copy behind it instead of black."""
     fitted_size(src_w, src_h, canvas_w, canvas_h)
+    if fill == "blur" and (src_w * canvas_h != src_h * canvas_w):
+        return (
+            "split=2[bg][fg];"
+            f"[bg]scale={canvas_w}:{canvas_h}:force_original_aspect_ratio=increase:flags=bilinear,crop={canvas_w}:{canvas_h},"
+            "gblur=sigma=30,eq=brightness=-0.12:saturation=0.9[bgb];"
+            f"[fg]scale={canvas_w}:{canvas_h}:force_original_aspect_ratio=decrease:flags=lanczos[fgs];"
+            f"[bgb][fgs]overlay=(W-w)/2:(H-h)/2,setsar=1,fps={fps}"
+        )
     return (
         f"scale={canvas_w}:{canvas_h}:force_original_aspect_ratio=decrease:flags=lanczos,"
         f"pad={canvas_w}:{canvas_h}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps={fps}"
@@ -42,8 +51,15 @@ def append_outro(
     *,
     ffmpeg: str,
     ffprobe: str,
+    fill: str = "black",
+    audio: Path | None = None,
 ) -> dict:
-    """Write destination = lesson picture, then the outro picture."""
+    """Write destination = lesson picture, then the outro picture.
+
+    fill="blur" frames a non-vertical outro over a blurred copy of itself. audio, when the
+    outro has no sound of its own, is played under it (the lesson's music continuing)
+    instead of silence. The outro's own picture and sound are never altered.
+    """
     lesson_probe = _probe(ffprobe, lesson)
     outro_probe = _probe(ffprobe, outro)
     lesson_video = _stream(lesson_probe, "video")
@@ -62,18 +78,29 @@ def append_outro(
     work = destination.parent / "_outro_work"
     work.mkdir(parents=True, exist_ok=True)
     normalized = work / "outro_normalized.mp4"
-    video_filter = outro_filter(src_w, src_h, canvas_w, canvas_h, 30)
+    video_filter = outro_filter(src_w, src_h, canvas_w, canvas_h, 30, fill)
     command = [ffmpeg, "-y", "-i", str(outro)]
     if outro_audio:
         command += [
-            "-vf", video_filter,
-            "-map", "0:v:0", "-map", "0:a:0",
+            "-filter_complex", f"[0:v]{video_filter}[v]",
+            "-map", "[v]", "-map", "0:a:0",
             "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", "30",
             "-c:a", "aac", "-ar", sample_rate, "-ac", "2",
             "-t", f"{outro_duration:.3f}",
             str(normalized),
         ]
         audio_policy = "outro audio kept and resampled to the lesson rate"
+    elif audio is not None and Path(audio).is_file():
+        command += [
+            "-i", str(audio),
+            "-filter_complex", f"[0:v]{video_filter}[v]",
+            "-map", "[v]", "-map", "1:a:0",
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", "30",
+            "-c:a", "aac", "-ar", sample_rate, "-ac", "2",
+            "-t", f"{outro_duration:.3f}",
+            str(normalized),
+        ]
+        audio_policy = "the outro file has no audio stream; the lesson's music continues under it and fades out"
     else:
         command += [
             "-f", "lavfi", "-t", f"{outro_duration:.3f}",
@@ -126,6 +153,7 @@ def append_outro(
         "canvas_height": canvas_h,
         "outro_audio": bool(outro_audio),
         "audio_policy": audio_policy,
+        "fill": fill,
         "video_streams": sum(1 for stream in final["streams"] if stream.get("codec_type") == "video"),
         "audio_streams": sum(1 for stream in final["streams"] if stream.get("codec_type") == "audio"),
     }

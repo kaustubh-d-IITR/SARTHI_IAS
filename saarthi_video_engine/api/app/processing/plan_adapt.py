@@ -9,6 +9,9 @@ from pathlib import Path
 from app.config import ENGINE_ROOT
 
 _DATASET = None
+# A cutaway that runs straight into the next one may be this short; on its own it needs MIN_CUTAWAY.
+BACK_TO_BACK_MIN = 1.0
+MIN_CUTAWAY = 2.0
 
 
 def _engine():
@@ -146,7 +149,7 @@ def engine_broll_cap() -> float:
     return float(BROLL_CAP)
 
 
-def build_engine_plan(transcript: dict, assets: list[dict], duration: float, title: str = "") -> dict:
+def build_engine_plan(transcript: dict, assets: list[dict], duration: float, title: str = "", caption_max_words: int = 3) -> dict:
     _engine()
     from editing_plan.phase2 import build_phase2_plan
     from treatment.reference_look import lesson_grade
@@ -171,6 +174,8 @@ def build_engine_plan(transcript: dict, assets: list[dict], duration: float, tit
         grade=lesson_grade(duration),
         plan_id="studio-plan",
         primary_category="lesson",
+        min_cutaway=BACK_TO_BACK_MIN,
+        caption_max_words=caption_max_words,
     )
     plan["render"]["object_fit"] = "cover"
     plan["render"]["corner_logo"] = "assets/logo.png"
@@ -234,6 +239,13 @@ PLACEMENT_FIELDS = (
     "page_url",
     "trimmed",
     "reason",
+    "matched_phrase",
+    "phrase_start",
+    "phrase_end",
+    "scores",
+    "occurrence",
+    "placement_rule",
+    "user_override",
 )
 
 

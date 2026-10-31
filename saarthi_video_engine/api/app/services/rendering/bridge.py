@@ -154,16 +154,20 @@ class EngineBridge:
     def clip_to(self, plan: dict, duration: float) -> dict:
         return self.engine["clip_plan_to_duration"](plan, duration)
 
-    def compose(self, plan: dict, destination: Path) -> Path:
-        return self._call("composition", self.engine["write_composition"], plan, self.engine["defaults"], destination)
+    def compose(self, plan: dict, destination: Path, studio: dict | None = None) -> Path:
+        defaults = self.engine["defaults"] if studio is None else {**self.engine["defaults"], "studio": studio}
+        return self._call("composition", self.engine["write_composition"], plan, defaults, destination)
 
     def hyperframes(self, composition: Path, output: Path) -> None:
-        if os.name == "nt":
-            self._call("HyperFrames render", self.engine["phase4"]._hyperframes, composition, output)
-        else:
-            self._call("HyperFrames render", hyperframes_posix, composition, output)
+        """One retry: a frame-capture browser can die transiently under memory pressure."""
+        run = self.engine["phase4"]._hyperframes if os.name == "nt" else hyperframes_posix
+        try:
+            self._call("HyperFrames render", run, composition, output)
+        except EngineFailure:
+            output.unlink(missing_ok=True)
+            self._call("HyperFrames render", run, composition, output)
 
-    def append_outro(self, lesson: Path, outro: Path, final: Path) -> dict:
+    def append_outro(self, lesson: Path, outro: Path, final: Path, fill: str = "black", audio: Path | None = None) -> dict:
         tool = self.engine["tool"]
         return self._call(
             "outro assembly",
@@ -173,7 +177,16 @@ class EngineBridge:
             final,
             ffmpeg=tool("ffmpeg"),
             ffprobe=tool("ffprobe"),
+            fill=fill,
+            audio=audio,
         )
+
+    def ffmpeg(self) -> str:
+        return self.engine["tool"]("ffmpeg")
+
+    def outro_seconds(self, outro: Path) -> float:
+        probe = self.probe(outro)
+        return float((probe.get("format") or {}).get("duration") or 0.0)
 
     def compare_audio(self, narration: Path, video: Path, seconds: float, workdir: Path) -> dict:
         """Same measurement as run_phase5._verify: lesson-length audio against the narration cut."""

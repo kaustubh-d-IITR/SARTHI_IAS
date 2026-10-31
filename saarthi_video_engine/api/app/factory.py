@@ -56,8 +56,21 @@ class LoginBody(BaseModel):
     password: str = Field(min_length=1, max_length=500)
 
 
+class AssistantMessage(BaseModel):
+    message: str = Field(min_length=1, max_length=500)
+
+
+class AssistantApply(BaseModel):
+    base_version_id: str = Field(min_length=1, max_length=40)
+    operations: list[dict] = Field(min_length=1, max_length=12)
+
+
+class AssistantUndo(BaseModel):
+    base_version_id: str = Field(min_length=1, max_length=40)
+
+
 class InitiateUpload(BaseModel):
-    kind: str = Field(pattern="^(raw|broll)$")
+    kind: str = Field(pattern="^(raw|broll|music)$")
     filename: str = Field(min_length=1, max_length=300)
     size_bytes: int = Field(gt=0)
     description: str | None = Field(default=None, max_length=500)
@@ -407,6 +420,8 @@ def create_app(
         payload: dict = {"base_version_id": body.base_version_id, "placements": body.placements}
         if body.change_title:
             payload["title"] = body.title or ""
+        if body.settings is not None:
+            payload["settings"] = body.settings
         with log_context(session_id=session_id):
             uploads.get_session(session_id, user)
             uploads.pull_work(session_id)
@@ -415,6 +430,56 @@ def create_app(
             sync_index(uploads, session_id, user)
             auth.audit(db, "plan_edited", user_id=user, session_id=session_id, detail={"version_id": result["plan_version"]["version_id"]})
         return result
+
+    @app.post("/api/sessions/{session_id}/assistant/propose")
+    def assistant_propose(session_id: str, body: AssistantMessage, user: str = Depends(owner), uploads: StudioStore = Depends(current_store)) -> dict:
+        from app.processing import assistant
+
+        with log_context(session_id=session_id):
+            return assistant.propose(uploads, session_id, user, body.message)
+
+    @app.post("/api/sessions/{session_id}/assistant/apply")
+    def assistant_apply(session_id: str, body: AssistantApply, user: str = Depends(owner), uploads: StudioStore = Depends(current_store)) -> dict:
+        from app.processing import assistant
+
+        with log_context(session_id=session_id):
+            result = assistant.apply(uploads, session_id, user, body.base_version_id, body.operations, session_lock(session_id))
+            uploads.push_work(session_id)
+            sync_index(uploads, session_id, user)
+            auth.audit(db, "assistant_edit", user_id=user, session_id=session_id, detail={"version_id": result["plan_version"]["version_id"], "operations": [op.get("operation") for op in body.operations]})
+        return result
+
+    @app.post("/api/sessions/{session_id}/assistant/undo")
+    def assistant_undo(session_id: str, body: AssistantUndo, user: str = Depends(owner), uploads: StudioStore = Depends(current_store)) -> dict:
+        from app.processing import assistant
+
+        with log_context(session_id=session_id):
+            result = assistant.undo(uploads, session_id, user, body.base_version_id, session_lock(session_id))
+            uploads.push_work(session_id)
+            sync_index(uploads, session_id, user)
+            auth.audit(db, "plan_undo", user_id=user, session_id=session_id, detail={"version_id": result["plan_version"]["version_id"]})
+        return result
+
+    @app.get("/api/music/library")
+    def music_library(_user: str = Depends(owner)) -> dict:
+        from app.services.music import CATEGORIES, public_tracks
+
+        return {"categories": list(CATEGORIES), "tracks": public_tracks()}
+
+    @app.get("/api/music/library/{track_id}/preview")
+    def music_preview(track_id: str, _user: str = Depends(owner)) -> FileResponse:
+        from app.services.music import track_path
+
+        path = track_path(track_id)
+        media = "audio/ogg" if path.suffix.lower() in {".ogg", ".oga", ".opus"} else "audio/mpeg"
+        return FileResponse(path, media_type=media, headers={"Cache-Control": "private, max-age=3600"})
+
+    @app.get("/api/uploads/{upload_id}/preview-url")
+    def upload_preview(upload_id: str, user: str = Depends(owner), uploads: StudioStore = Depends(current_store)) -> dict:
+        meta = uploads.get_upload(upload_id, user)
+        if meta.get("validation_status") != "valid":
+            raise StudioError(409, "upload_not_ready", "That upload has not been validated.")
+        return {"url": uploads.objects.presign_get(meta["object_key"], active.signed_url_seconds, meta.get("filename"), inline=True), "expires_in": active.signed_url_seconds}
 
     @app.get("/api/sessions/{session_id}/editing-plan/versions")
     def plan_versions(session_id: str, user: str = Depends(owner), uploads: StudioStore = Depends(current_store)) -> dict:

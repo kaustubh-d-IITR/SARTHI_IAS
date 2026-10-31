@@ -225,6 +225,28 @@ def test_cli_migrate_and_check_schema_report_the_revision(pg_url: str, monkeypat
     assert "postgres@" not in out and "password" not in out.lower()
 
 
+def test_first_owner_account_on_postgres(pg_url: str, monkeypatch, capsys):
+    """The Render shell procedure: migrate, create-user, user-status, verify-login, against PostgreSQL."""
+    from app.auth import login
+
+    monkeypatch.setenv("DATABASE_URL", pg_url)
+    monkeypatch.setenv("STUDIO_ENV", "development")
+    answers = iter(["a long enough test passphrase"] * 3)
+    monkeypatch.setattr(cli.getpass, "getpass", lambda _prompt="": next(answers))
+    assert cli.main(["migrate"]) == 0
+    assert cli.main(["create-user", "--email", "Owner@Example.org", "--name", "Owner"]) == 0
+    assert cli.main(["user-status", "--email", "owner@example.org"]) == 0
+    assert cli.main(["verify-login", "--email", "owner@example.org"]) == 0
+    out = capsys.readouterr().out
+    assert f"Database: postgresql://127.0.0.1:" in out and "passphrase" not in out and "scrypt" not in out
+    db = get_engine(_settings(pg_url).resolved_database_url)
+    with db.connect() as conn:
+        stored = conn.execute(text("SELECT email, password_hash LIKE 'scrypt$%' FROM users")).all()
+    assert stored == [("owner@example.org", True)]
+    user, token = login(db, "owner@example.org", "a long enough test passphrase", "127.0.0.1", "test", 1, 5)
+    assert user["email"] == "owner@example.org" and token
+
+
 def test_worker_loop_steps_work_on_postgres(pg_url: str):
     """The worker's first calls: register, reap expired leases, claim a job."""
     url = _settings(pg_url).resolved_database_url

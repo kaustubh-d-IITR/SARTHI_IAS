@@ -1,6 +1,10 @@
-import { clientId } from "./client";
+﻿import { clientId } from "./client";
 import type {
+  AssistantOperation,
+  AssistantReply,
   EditingPlanDocument,
+  MusicTrack,
+  SettingsChange,
   HealthResponse,
   MediaRecord,
   PlacementEdit,
@@ -210,9 +214,54 @@ export async function getThumbnail(sessionId: string, assetId: string): Promise<
 
 export function savePlanEdits(
   sessionId: string,
-  payload: { base_version_id: string; placements: PlacementEdit[]; title?: string; change_title?: boolean },
+  payload: { base_version_id: string; placements: PlacementEdit[]; title?: string; change_title?: boolean; settings?: SettingsChange },
 ): Promise<EditingPlanDocument> {
   return request<EditingPlanDocument>(`/api/sessions/${sessionId}/editing-plan/edits`, { method: "POST", body: payload });
+}
+
+export function getMusicLibrary(): Promise<{ categories: string[]; tracks: MusicTrack[] }> {
+  return request("/api/music/library");
+}
+
+/** A library track as a playable blob URL. The request carries the sign-in cookie. */
+export async function musicPreviewUrl(trackId: string): Promise<string> {
+  let response: Response;
+  try {
+    response = await fetch(`${base}/api/music/library/${encodeURIComponent(trackId)}/preview`, { credentials: "include", headers: headers() });
+  } catch {
+    throw new ApiError(0, "Could not reach the studio API.");
+  }
+  if (!response.ok) throw new ApiError(response.status, await readError(response));
+  return URL.createObjectURL(await response.blob());
+}
+
+export async function uploadPreviewUrl(uploadId: string): Promise<string> {
+  const body = await request<{ url: string }>(`/api/uploads/${uploadId}/preview-url`);
+  return absoluteUrl(body.url);
+}
+
+export async function uploadMusic(file: File, onProgress: (percent: number) => void): Promise<MediaRecord> {
+  const target = await request<{ upload_id: string; upload: { url: string; headers: Record<string, string> } }>("/api/uploads/initiate", {
+    method: "POST",
+    body: { kind: "music", filename: file.name, size_bytes: file.size },
+  });
+  onProgress(1);
+  await putWithProgress(target.upload.url, file, target.upload.headers, onProgress);
+  const record = await request<MediaRecord>(`/api/uploads/${target.upload_id}/complete`, { method: "POST" });
+  onProgress(100);
+  return record;
+}
+
+export function assistantPropose(sessionId: string, message: string): Promise<AssistantReply> {
+  return request<AssistantReply>(`/api/sessions/${sessionId}/assistant/propose`, { method: "POST", body: { message } });
+}
+
+export function assistantApply(sessionId: string, baseVersionId: string, operations: AssistantOperation[]): Promise<EditingPlanDocument> {
+  return request<EditingPlanDocument>(`/api/sessions/${sessionId}/assistant/apply`, { method: "POST", body: { base_version_id: baseVersionId, operations } });
+}
+
+export function undoPlanChange(sessionId: string, baseVersionId: string): Promise<EditingPlanDocument> {
+  return request<EditingPlanDocument>(`/api/sessions/${sessionId}/assistant/undo`, { method: "POST", body: { base_version_id: baseVersionId } });
 }
 
 export function getPlanVersions(sessionId: string): Promise<{ current_version_id: string | null; versions: PlanVersionRow[] }> {

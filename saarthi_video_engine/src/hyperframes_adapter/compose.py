@@ -39,6 +39,10 @@ def write_composition(plan: dict, defaults: dict, destination: Path) -> Path:
 
 def render_html(plan: dict, defaults: dict, asset_root: Path | None = None) -> str:
     family = plan["style"]["layout_family"]
+    if defaults.get("studio"):
+        from .studio_layout import render_studio_html
+
+        return render_studio_html(plan, defaults, defaults["studio"], _title(plan, family, defaults["bounded_card"]))
     duration = plan["input_media"]["duration_seconds"]
     width = plan["render"]["width"]
     height = plan["render"]["height"]

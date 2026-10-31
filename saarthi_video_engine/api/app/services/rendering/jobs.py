@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import traceback
 import uuid
 from datetime import datetime, timezone
@@ -31,6 +32,8 @@ PUBLIC_KEYS = (
     "approved_broll_placements",
     "plan_version_id",
     "title",
+    "quality",
+    "studio_settings",
 )
 
 
@@ -139,6 +142,7 @@ def run_render(store: StudioStore, session_id: str, owner: str, bridge: EngineBr
             _history(record, render_id, "completed")
             store.write_session(record)
         return
+    logging.getLogger("studio.render").warning("render failed", extra={"render_id": render_id, "error": message[:400], "detail": detail[-3000:]})
     with session_lock(session_id):
         record = store.get_session(session_id, owner)
         state = record.get("render") or {}

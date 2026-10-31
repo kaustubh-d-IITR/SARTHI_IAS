@@ -8,8 +8,9 @@ from collections.abc import Callable
 from pathlib import Path
 
 from app.errors import StudioError
-from app.processing.matching import CONFIG as MATCHING_CONFIG
-from app.processing.matching import match_assets
+from app.processing.director import CONFIG as MATCHING_CONFIG
+from app.processing.director import direct, phrase_texts
+from app.processing.settings import default_settings, merge
 from app.processing.plan_adapt import (
     assets_from_engine,
     assets_from_user,
@@ -219,7 +220,7 @@ def _run(store: StudioStore, session_id: str, client_id: str, services: Services
                 store.set_upload_sha(meta["upload_id"], catalogue[-1]["sha256"])
         batch, analysis_info = _analyse_footage(store, transcript, catalogue, services)
         _advance(store, session_id, client_id, "selecting_footage", "Matching clips to the speech.")
-        placements, evaluations = match_assets(transcript, catalogue, batch, duration)
+        placements, evaluations = direct(transcript, catalogue, batch, duration)
         assets = assets_from_user(placements)
     (work / "catalogue.json").write_text(
         json.dumps({"assets": [_private_catalogue(item) for item in catalogue], "evaluations": evaluations, "analysis": analysis_info}, indent=2),
@@ -228,7 +229,13 @@ def _run(store: StudioStore, session_id: str, client_id: str, services: Services
     _advance(store, session_id, client_id, "building_plan", "Building the editing plan.")
     record = store.get_session(session_id, client_id)
     title = _title_for(record, transcript)
-    engine_plan = build_engine_plan(transcript, assets, duration, title["text"])
+    settings = default_settings()
+    if record.get("rematch_of"):
+        try:
+            settings = merge(load_version(work, record["rematch_of"]).get("settings"), None)
+        except StudioError:
+            pass
+    engine_plan = build_engine_plan(transcript, assets, duration, title["text"], settings["captions"]["max_words"])
     placements, dropped = reconcile(placements, engine_plan)
     _advance(store, session_id, client_id, "validating_plan", "Checking timestamps and asset references.")
     validation = validate_envelope(record, engine_plan, placements, catalogue)
@@ -246,6 +253,7 @@ def _run(store: StudioStore, session_id: str, client_id: str, services: Services
         matching_config=MATCHING_CONFIG if record["mode"] == "my_broll" else {"matcher": "existing select_clips", "ranker": "none"},
         title=title,
         make_current=bool(validation["ok"]),
+        settings=settings,
     )
     if not validation["ok"]:
         _fail(store, session_id, client_id, "; ".join(validation["errors"][:8]) or "The editing plan failed validation.")
@@ -313,7 +321,7 @@ def _analyse_footage(store: StudioStore, transcript: dict, catalogue: list[dict]
     available, reason = provider.availability()
     windows = build_windows(transcript)
     descriptions = [item["description"] for item in catalogue if item.get("description")]
-    texts = list(dict.fromkeys([window.text for window in windows] + descriptions))
+    texts = list(dict.fromkeys([window.text for window in windows] + phrase_texts(transcript) + descriptions))
     inputs = [
         AssetInput(item["asset_id"], item["sha256"], store.media_file(item["asset_id"]), float(item.get("duration_seconds") or 0.0), item.get("description") or "", item.get("filename") or "")
         for item in catalogue

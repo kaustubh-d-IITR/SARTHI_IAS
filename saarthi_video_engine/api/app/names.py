@@ -15,6 +15,16 @@ def display_filename(raw: str | None) -> str:
     return (cleaned[:180] or "video")
 
 
+MUSIC_EXTENSIONS = (".mp3", ".wav", ".m4a", ".aac")
+
+
+def require_music_extension(raw: str | None) -> str:
+    suffix = Path(str(raw or "")).suffix.lower()
+    if suffix not in MUSIC_EXTENSIONS:
+        raise StudioError(415, "unsupported_type", "Use an audio file ending in mp3, wav, m4a or aac.")
+    return suffix
+
+
 def require_extension(raw: str | None) -> str:
     suffix = Path(str(raw or "")).suffix.lower()
     if suffix not in ALLOWED_EXTENSIONS:

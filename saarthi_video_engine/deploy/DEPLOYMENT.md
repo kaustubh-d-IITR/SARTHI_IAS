@@ -82,6 +82,12 @@ Render's health check uses `/api/live` on purpose: `/api/ready` returns 503 whil
 
 Only the API migrates. The worker does not: on start it waits up to `STUDIO_SCHEMA_WAIT_SECONDS` (600 by default) for the database to reach the head revision, logging `waiting for database migrations` with the database host and name, then registers and polls. If the schema never arrives it exits with a message naming the database, which usually means the API and worker have different `DATABASE_URL` values.
 
+### Deploying the intelligent-editing upgrade
+
+No new environment variables are required and no migration is added. Both images now also contain `assets/music_library/`. Because `render.yaml` sets `autoDeploy: false`, deploy by hand after the push: first `sarthi-studio-api` (its pre-deploy `migrate` should report `0002_repair_missing_tables`), then `sarthi-studio-worker`. Vercel deploys the website from the push on its own.
+
+Optional: to let the editing assistant fall back to Gemini for instructions its built-in rules do not understand, add `GEMINI_API_KEY` to the **API** service as well (it is currently only on the worker). Without it the assistant still works with its rules and asks a question when unsure. `STUDIO_KEEP_SCRATCH=1` keeps a worker's scratch folder for debugging; do not set it in production.
+
 ## 5. Vercel
 
 1. New Project → import the same repository. Root Directory: `saarthi_video_engine/web`. Framework: Vite. `vercel.json` sets `npm ci`, `npm run build`, and `dist`.

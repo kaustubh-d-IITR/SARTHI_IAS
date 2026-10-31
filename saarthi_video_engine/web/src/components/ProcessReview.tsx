@@ -11,7 +11,9 @@ import {
   startRender,
 } from "../lib/api";
 import type { EditingPlanDocument, PictureDecision, RenderStatusBody, SessionReceipt, SessionStatusBody, TranscriptDocument } from "../types";
+import { AssistantPanel } from "./AssistantPanel";
 import { evidenceLabel, PlanReview } from "./PlanReview";
+import { StudioControls } from "./StudioControls";
 import { PreparedNotice } from "./PreparedNotice";
 import { isRendering, RenderPanel } from "./RenderPanel";
 
@@ -226,7 +228,11 @@ export function ProcessReview({
       )}
 
       {status.status === "plan_ready" && plan && onPlanSaved && (
-        <PlanReview sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} />
+        <>
+          <PlanReview sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} transcript={transcript} />
+          <StudioControls sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} />
+          <AssistantPanel sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} />
+        </>
       )}
 
       {transcript && (

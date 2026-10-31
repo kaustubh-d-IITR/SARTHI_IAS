@@ -19,13 +19,17 @@ from sqlalchemy.exc import IntegrityError
 from app.config import Settings
 from app.db import get_engine, studio_sessions, uploads, utcnow
 from app.errors import StudioError
-from app.media_probe import probe_video
-from app.names import clean_description, display_filename, require_extension
+from app.media_probe import probe_audio, probe_video
+from app.names import clean_description, display_filename, require_extension, require_music_extension
 from app.objects import ObjectStorage, StorageError, build_storage
 from app.workspace import Workspace
 
 CHUNK = 1024 * 1024
-CONTENT_TYPES = {".mp4": "video/mp4", ".m4v": "video/mp4", ".mov": "video/quicktime", ".webm": "video/webm", ".mkv": "video/x-matroska"}
+CONTENT_TYPES = {
+    ".mp4": "video/mp4", ".m4v": "video/mp4", ".mov": "video/quicktime", ".webm": "video/webm", ".mkv": "video/x-matroska",
+    ".mp3": "audio/mpeg", ".wav": "audio/wav", ".m4a": "audio/mp4", ".aac": "audio/aac",
+}
+MUSIC_MAX_BYTES = 50 * 1024 * 1024
 
 
 def _now() -> str:
@@ -168,14 +172,17 @@ class StudioStore:
                 handle.write(chunk)
         return total, digest.hexdigest()
 
+    def _limit(self, kind: str) -> int:
+        return min(self.settings.max_file_bytes, MUSIC_MAX_BYTES) if kind == "music" else self.settings.max_file_bytes
+
     def initiate_upload(self, client_id: str, kind: str, filename: str, size_bytes: int, description: str | None) -> dict:
         """Reserve an object key and return a short-lived signed PUT for it."""
-        suffix = require_extension(filename)
+        suffix = require_music_extension(filename) if kind == "music" else require_extension(filename)
         display = display_filename(filename)
         text = clean_description(description) if kind == "broll" else ""
         if size_bytes <= 0:
             raise StudioError(400, "empty_upload", "The file is empty.")
-        if size_bytes > self.settings.max_file_bytes:
+        if size_bytes > self._limit(kind):
             raise StudioError(413, "file_too_large", "That file is larger than the configured limit.")
         upload_id = str(uuid.uuid4())
         key = f"uploads/{upload_id}/media{suffix}"
@@ -216,13 +223,13 @@ class StudioStore:
 
         if info.size <= 0:
             reject(400, "empty_upload", "The file is empty.")
-        if info.size > self.settings.max_file_bytes:
+        if info.size > self._limit(row.kind):
             reject(413, "file_too_large", "That file is larger than the configured limit.")
         if row.declared_size and info.size != row.declared_size:
             reject(422, "size_mismatch", "The stored file is not the size that was announced.")
         target = str(self.workspace.path(row.object_key)) if self.workspace.passthrough else self.objects.presign_get(row.object_key, 300)
         try:
-            probed = probe_video(target)
+            probed = probe_audio(target) if row.kind == "music" else probe_video(target)
         except StudioError as exc:
             reject(exc.status, exc.code, exc.message)
         meta = dict(row.meta or {})

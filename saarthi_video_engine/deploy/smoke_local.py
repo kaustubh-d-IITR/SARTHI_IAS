@@ -112,6 +112,7 @@ class Smoke:
                 "STUDIO_VISUAL_PROVIDER": self.args.visual,
                 "STUDIO_ENGINE_PYTHON": str(ENGINE_PYTHON),
                 "STUDIO_WORKER_POLL_SECONDS": "1",
+                "STUDIO_KEEP_SCRATCH": "1" if self.args.keep_scratch else "",
                 "ELEVENLABS_API_KEY": "",
                 "GEMINI_API_KEY": "",
                 "PYTHONIOENCODING": "utf-8",
@@ -240,8 +241,10 @@ class Smoke:
         raw = self.upload(args.raw, "raw")
         broll = []
         if args.mode == "my_broll":
-            clip = self.upload(args.broll, "broll", args.description)
-            broll = [{"asset_id": clip["upload_id"], "description": args.description}]
+            for path, description in zip(args.broll, args.description):
+                clip = self.upload(path, "broll", description)
+                broll.append({"asset_id": clip["upload_id"], "description": description})
+        music_upload = self.upload(args.music, "music") if args.music else None
         created = self.call("POST", "/api/sessions", json={"mode": args.mode, "raw_video_id": raw["upload_id"], "broll": broll})
         assert created.status_code == 200, created.text
         sid = created.json()["session_id"]
@@ -270,14 +273,33 @@ class Smoke:
             visual=(plan.get("visual_analysis") or {}).get("provider"),
             visual_performed=(plan.get("visual_analysis") or {}).get("performed"),
         )
+        for row in plan.get("placements") or []:
+            self.note("placement", asset=row.get("filename"), start=row.get("speech_start"), end=row.get("speech_end"), phrase=row.get("matched_phrase"), rule=row.get("placement_rule"), confidence=row.get("confidence"))
         if args.mode == "my_broll":
             own = {item["asset_id"] for item in broll}
             assert all(item in own for item in footage), "Mode B placed footage the user did not upload"
+        for message in args.assistant:
+            reply = self.call("POST", f"/api/sessions/{sid}/assistant/propose", json={"message": message}).json()
+            assert reply.get("status") == "proposal", reply
+            applied = self.call("POST", f"/api/sessions/{sid}/assistant/apply", json={"base_version_id": reply["base_version_id"], "operations": reply["operations"]})
+            assert applied.status_code == 200, applied.text
+            plan = applied.json()
+            self.note("assistant applied", message=message, understood=reply["understood"], plan_version=plan["plan_version"]["number"], origin=plan["plan_version"]["origin"])
+            for row in plan.get("placements") or []:
+                self.note("placement after assistant", asset=row.get("filename"), start=row.get("speech_start"), end=row.get("speech_end"), phrase=row.get("matched_phrase"))
+        raw_settings = Path(args.settings[1:]).read_text(encoding="utf-8") if args.settings and args.settings.startswith("@") else args.settings
+        settings = json.loads(raw_settings) if raw_settings else {}
+        if music_upload:
+            settings.setdefault("music", {}).update({"source": "upload", "upload_id": music_upload["upload_id"]})
+        if args.mode == "my_broll" or settings or args.title:
             edits = [{key: row[key] for key in ("asset_id", "speech_start", "speech_end", "source_in", "source_out", "approval")} for row in plan.get("placements") or []]
-            edited = self.call("POST", f"/api/sessions/{sid}/editing-plan/edits", json={"base_version_id": plan["plan_version"]["version_id"], "placements": edits, "title": args.title, "change_title": True})
+            body = {"base_version_id": plan["plan_version"]["version_id"], "placements": edits, "title": args.title, "change_title": True}
+            if settings:
+                body["settings"] = settings
+            edited = self.call("POST", f"/api/sessions/{sid}/editing-plan/edits", json=body)
             assert edited.status_code == 200, edited.text
             plan = edited.json()
-            self.note("plan edited (title)", plan_version=plan["plan_version"]["number"], parent=plan["plan_version"].get("parent_version_id", "")[:12])
+            self.note("plan edited (title and settings)", plan_version=plan["plan_version"]["number"], settings=sorted(settings))
 
         render = self.call("POST", f"/api/sessions/{sid}/render", headers={"Idempotency-Key": "smoke-render-1"})
         double = self.call("POST", f"/api/sessions/{sid}/render", headers={"Idempotency-Key": "smoke-render-2"})
@@ -313,6 +335,8 @@ class Smoke:
             hyperframes_logs=[key.split(f"{rid}/", 1)[1] for key in logs],
             hyperframes_log_mentions_render="render" in render_log.lower(),
             objects_in_render_prefix=len(keys),
+            quality=(state.get("quality") or {}).get("status"),
+            quality_checks={item["name"]: item["status"] for item in (state.get("quality") or {}).get("checks") or []},
         )
         return {"session_id": sid, "render_id": rid, "ok": True}
 
@@ -322,16 +346,20 @@ def main() -> int:
     parser.add_argument("--mode", choices=("my_broll", "auto_edit"), required=True)
     parser.add_argument("--raw", type=Path, required=True)
     parser.add_argument("--transcript", type=Path, required=True)
-    parser.add_argument("--broll", type=Path)
-    parser.add_argument("--description", default="")
+    parser.add_argument("--broll", type=Path, action="append", default=[])
+    parser.add_argument("--description", action="append", default=[])
+    parser.add_argument("--music", type=Path, help="Upload this audio file as the custom music track.")
+    parser.add_argument("--settings", help="JSON of studio settings to apply before rendering.")
     parser.add_argument("--title", default="Smoke [[Test]]")
+    parser.add_argument("--keep-scratch", action="store_true", help="Keep the worker's scratch folder for inspection.")
+    parser.add_argument("--assistant", action="append", default=[], help="An editing instruction to propose and apply before rendering.")
     parser.add_argument("--visual", default="auto")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--process-minutes", type=float, default=30)
     parser.add_argument("--render-minutes", type=float, default=40)
     args = parser.parse_args()
-    if args.mode == "my_broll" and not (args.broll and args.description):
-        parser.error("my_broll needs --broll and --description")
+    if args.mode == "my_broll" and (not args.broll or len(args.broll) != len(args.description)):
+        parser.error("my_broll needs one --description per --broll")
     smoke = Smoke(args)
     result: dict = {"ok": False}
     try:

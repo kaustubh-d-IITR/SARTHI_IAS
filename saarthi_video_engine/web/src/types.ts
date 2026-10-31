@@ -63,6 +63,8 @@ export type RenderStatusBody = {
   last_completed?: RenderStatusBody;
   plan_version_id?: string;
   title?: { text: string; status: string };
+  quality?: { status: "passed" | "warnings" | "failed"; failed: number; warnings: number; checks: QualityCheck[] };
+  studio_settings?: boolean;
 };
 
 export type TitleSuggestion = { text: string; status: "ai_suggestion"; basis: string };
@@ -196,7 +198,77 @@ export type Placement = {
   page_url?: string;
   trimmed?: string;
   reason?: string;
+  matched_phrase?: string;
+  phrase_start?: number;
+  phrase_end?: number;
+  scores?: Record<string, number | null>;
+  occurrence?: { index: number; count: number; terms: string[] };
+  placement_rule?: string;
+  user_override?: { target_phrase: string; matched_phrase: string; by: string; duration_seconds?: number };
 };
+
+export type EffectName =
+  | "glitter"
+  | "sparkle"
+  | "cinematic"
+  | "warm"
+  | "cool"
+  | "black_and_white"
+  | "contrast"
+  | "saturation"
+  | "brightness"
+  | "vignette"
+  | "background_blur"
+  | "zoom";
+
+export type EffectSetting = { enabled: boolean; intensity: number; scope: string };
+
+export type StudioSettings = {
+  version: number;
+  framing: { mode: "fill" | "balanced" | "fit"; teacher_height: number; focus_x: number | null; focus_y: number };
+  broll: { fit: "cover" | "contain_blur" };
+  transitions: { style: "cut" | "fade"; seconds: number };
+  captions: { size: number; position: number; highlight: string; color: string; style: "box" | "outline" | "shadow"; max_words: number; uppercase: boolean };
+  music: {
+    source: "default" | "library" | "upload" | "none";
+    track_id: string | null;
+    upload_id: string | null;
+    volume: number;
+    under_speech: number;
+    in_pauses: number;
+    fade_in: number;
+    fade_out: number;
+    ducking: boolean;
+    into_outro: boolean;
+  };
+  effects: Record<EffectName, EffectSetting>;
+  outro: { fill: "blur" | "black" };
+  intro_seconds: number;
+};
+
+export type SettingsChange = {
+  [Section in Exclude<keyof StudioSettings, "version">]?: StudioSettings[Section] extends Record<string, unknown> ? Partial<StudioSettings[Section]> : StudioSettings[Section];
+};
+
+export type MusicTrack = {
+  track_id: string;
+  title: string;
+  artist: string;
+  category: string;
+  duration_seconds: number | null;
+  license: string;
+  license_url: string;
+  page_url: string;
+  default: boolean;
+};
+
+export type AssistantOperation = { operation: string; asset_id?: string; target_phrase?: string; matched_phrase?: string; target_start?: number; duration_seconds?: number; [key: string]: unknown };
+
+export type AssistantReply =
+  | { status: "proposal"; understood: string; operations: AssistantOperation[]; base_version_id: string; source?: string }
+  | { status: "clarify"; question: string; operations: []; base_version_id?: string };
+
+export type QualityCheck = { name: string; status: "passed" | "warning" | "failed"; detail: string };
 
 export type FrameAnalysis = {
   timestamp: number | null;
@@ -275,6 +347,8 @@ export type EditingPlanDocument = {
   broll_cap?: number;
   validation: { ok: boolean; errors: string[] };
   rendered: boolean;
+  settings?: StudioSettings;
+  assistant_operations?: AssistantOperation[];
 };
 
 export type PlanVersionRow = {
@@ -305,6 +379,8 @@ export type PlacementEdit = {
   source_in: number;
   source_out: number;
   approval: "approved" | "rejected";
+  target_phrase?: string;
+  duration_seconds?: number;
 };
 
 export type BrollDraft = {

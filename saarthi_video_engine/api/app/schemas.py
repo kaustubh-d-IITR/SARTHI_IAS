@@ -68,6 +68,7 @@ class PlanEdit(BaseModel):
     placements: list[dict]
     title: str | None = None
     change_title: bool = False
+    settings: dict | None = None
 
 
 class SessionAsset(BaseModel):

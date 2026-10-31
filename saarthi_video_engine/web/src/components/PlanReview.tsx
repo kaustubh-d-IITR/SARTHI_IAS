@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { getThumbnail, savePlanEdits } from "../lib/api";
-import type { CatalogueItem, EditingPlanDocument, Placement, PlacementEdit, VisualAnalysis } from "../types";
+import { getThumbnail, savePlanEdits, undoPlanChange } from "../lib/api";
+import type { CatalogueItem, EditingPlanDocument, Placement, PlacementEdit, TranscriptDocument, VisualAnalysis } from "../types";
+import { Timeline } from "./Timeline";
 import { TitleField } from "./TitleField";
 
 type Draft = Placement & { key: string };
@@ -69,18 +70,38 @@ function toDrafts(plan: EditingPlanDocument): Draft[] {
   return [...(plan.placements || []), ...(plan.rejected_placements || [])].map((item, index) => ({ ...item, key: `${item.asset_id}-${index}` }));
 }
 
+function captionSpans(transcript: TranscriptDocument | null | undefined, maxWords: number): { start: number; end: number }[] {
+  const spans: { start: number; end: number }[] = [];
+  for (const segment of transcript?.segments || []) {
+    const words = (segment.words || []).filter((word) => typeof word.start === "number" && typeof word.end === "number");
+    if (!words.length) {
+      if (typeof segment.start === "number" && typeof segment.end === "number") spans.push({ start: segment.start, end: segment.end });
+      continue;
+    }
+    for (let k = 0; k < words.length; k += maxWords) {
+      const group = words.slice(k, k + maxWords);
+      spans.push({ start: Number(group[0].start), end: Number(group[group.length - 1].end) });
+    }
+  }
+  return spans;
+}
+
 export function PlanReview({
   sessionId,
   plan,
   disabled,
   onSaved,
+  transcript,
 }: {
   sessionId: string;
   plan: EditingPlanDocument;
   disabled: boolean;
   onSaved: (plan: EditingPlanDocument) => void;
+  transcript?: TranscriptDocument | null;
 }) {
   const [drafts, setDrafts] = useState<Draft[]>(() => toDrafts(plan));
+  const [selected, setSelected] = useState<string | null>(null);
+  const [undoing, setUndoing] = useState(false);
   const [title, setTitle] = useState(plan.title?.text || "");
   const [errors, setErrors] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -192,6 +213,20 @@ export function PlanReview({
     }
   }
 
+  async function undo() {
+    if (!plan.plan_version) return;
+    setUndoing(true);
+    setErrors(null);
+    try {
+      onSaved(await undoPlanChange(sessionId, plan.plan_version.version_id));
+    } catch (caught) {
+      setErrors(caught instanceof Error ? caught.message : "Nothing could be undone.");
+    } finally {
+      setUndoing(false);
+    }
+  }
+
+  const captions = useMemo(() => captionSpans(transcript, plan.settings?.captions.max_words || 3), [transcript, plan.settings]);
   const suggestion = plan.title?.suggestion;
   const abstained = (plan.evaluations || []).filter((row) => row.status === "abstained");
 
@@ -230,6 +265,19 @@ export function PlanReview({
         </p>
       </div>
 
+      {lessonSeconds > 0 && (
+        <Timeline
+          duration={lessonSeconds}
+          rows={drafts}
+          captions={captions}
+          settings={plan.settings}
+          selected={selected}
+          disabled={disabled || saving}
+          onSelect={setSelected}
+          onMove={(row, start, end) => setTimeline(row as Draft, start, end)}
+        />
+      )}
+
       <ol className="mt-4 grid gap-4">
         {drafts.map((row) => {
           const item = catalogue.get(row.asset_id);
@@ -237,7 +285,7 @@ export function PlanReview({
           const rejected = row.approval === "rejected";
           const length = row.speech_end - row.speech_start;
           return (
-            <li key={row.key} className={`rounded-2xl border p-4 text-sm ${rejected ? "border-line bg-slate-50 opacity-80" : "border-teal/40 bg-teal/5"}`}>
+            <li key={row.key} onClick={() => setSelected(row.key)} className={`rounded-2xl border p-4 text-sm ${rejected ? "border-line bg-slate-50 opacity-80" : "border-teal/40 bg-teal/5"} ${selected === row.key ? "ring-2 ring-amber-300" : ""}`}>
               <div className="flex flex-wrap gap-4">
                 <Thumbnail sessionId={sessionId} assetId={row.asset_id} available={Boolean(item?.thumbnail)} label={row.filename} />
                 <div className="min-w-0 flex-1">
@@ -249,7 +297,17 @@ export function PlanReview({
                   <p className="mt-1 text-slate-700">
                     Visual analysis: {analysis?.performed ? analysis.summary : analysis?.reason ? `not performed (${analysis.reason})` : "not performed"}
                   </p>
-                  {row.speech_text && <p className="mt-1 text-slate-700">Matched speech: {row.speech_text}</p>}
+                  {row.matched_phrase ? (
+                    <p className="mt-1 text-slate-700">
+                      Placed on: <span className="font-medium">“{row.matched_phrase}”</span> · {seconds(row.speech_start)}–{seconds(row.speech_end)}
+                      {row.occurrence && row.occurrence.count > 1 ? ` · mention ${row.occurrence.index} of ${row.occurrence.count}` : ""}
+                      {row.placement_rule === "back_to_back" ? " · runs straight into the next cutaway" : ""}
+                    </p>
+                  ) : (
+                    row.speech_text && <p className="mt-1 text-slate-700">Matched speech: {row.speech_text}</p>
+                  )}
+                  {row.user_override && <p className="mt-1 text-slate-700">Your instruction: “{row.user_override.target_phrase}”</p>}
+                  <p className="mt-1 text-slate-600">AI confidence: {score(row.confidence)} · {row.approved_by === "user" ? "approved by you" : "not yet approved by you"}</p>
                   <p className="mt-1 text-slate-600">
                     Evidence: {evidenceLabel(row.evidence)} · description {score(row.description_relevance)} · visual {score(row.visual_relevance)} · combined {score(row.score)}
                   </p>
@@ -347,7 +405,7 @@ export function PlanReview({
       )}
 
       <p className="mt-4 text-sm text-slate-600">
-        B-roll would cover {covered.toFixed(1)}s of the {cap.toFixed(1)}s allowed ({Math.round((plan.broll_cap || 0.58) * 100)}% of the lesson). Each cutaway must last at least {MIN_CUTAWAY}s and plays its source in real time.
+        B-roll would cover {covered.toFixed(1)}s of the {cap.toFixed(1)}s allowed ({Math.round((plan.broll_cap || 0.58) * 100)}% of the lesson). Each cutaway lasts at least {MIN_CUTAWAY}s (or 1 s when it runs straight into the next cutaway) and plays its source in real time.
       </p>
       {errors && (
         <p className="mt-3 text-sm text-red-700" role="alert">
@@ -360,6 +418,9 @@ export function PlanReview({
         </button>
         <button type="button" className="rounded-full border border-line px-4 py-2 text-sm disabled:opacity-40" disabled={!dirty || saving} onClick={() => { setDrafts(toDrafts(plan)); setTitle(plan.title?.text || ""); setErrors(null); }}>
           Discard changes
+        </button>
+        <button type="button" className="rounded-full border border-line px-4 py-2 text-sm disabled:opacity-40" disabled={dirty || saving || undoing || disabled || !plan.plan_version?.parent_version_id} onClick={() => void undo()}>
+          {undoing ? "Undoing…" : "Undo last change"}
         </button>
       </div>
       {disabled && <p className="mt-2 text-sm text-slate-500">Changes are locked while a render is running.</p>}

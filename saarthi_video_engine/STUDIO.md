@@ -173,6 +173,31 @@ The title is used exactly as typed, in any language. `[[word]]` shows that word 
 
 `POST /api/sessions` accepts an optional `title`.
 
+## Intelligent editing (upgrade after Phase 5)
+
+Design notes: `EDITING_UPGRADE_ARCHITECTURE.md`. Everything below is stored on the plan version, can be inspected and changed before rendering, and is written by the existing HyperFrames renderer.
+
+**Editing director (Mode B).** `api/app/processing/director.py` rebuilds phrases from ElevenLabs word timestamps (punctuation, pauses, clause starters such as "na hi", "aur", "jab", "and", "because") and scores every clip against every phrase: description concepts spoken in the phrase (with a small Hindi/English lexicon), the described action, negation (a crossed-out clip only belongs to speech that says "no"/"na hi"), text-model and CLIP similarity when available, timing and clip length. The earliest phrase wins unless a later one is clearly stronger, and the cutaway starts on the first word of the clause that names the subject. Consecutive phrases may get back-to-back cutaways of at least 1 s; a cutaway on its own still lasts at least 2 s. Each placement records `matched_phrase`, `phrase_start`, the per-signal `scores`, which mention it used (`occurrence`), and why. On the test lesson the newspaper clip starts at 0.12 s ("naa hi mainne newspaper padha"), NCERT at 1.26 s, YouTube at 6.08 s, and nothing lands on the later "newspaper padh lo" advice. A user instruction can pin a clip to a phrase (`target_phrase` in an edit); it is recorded as `user_override`.
+
+**Look and sound settings** (`settings` on each plan version, `api/app/processing/settings.py`): framing (fill / balanced / whole frame, teacher height, automatic or manual horizontal focus), B-roll fit, clean cuts or a short fade, captions (size, position, colours, box/outline/shadow, words per caption, capitals), music (default track, bundled library, your upload, or none; volume, level during speech and pauses, fades, ducking, continue under the outro), effects (glitter, sparkle, cinematic, warm, cool, black and white, contrast, saturation, brightness, vignette, background blur, slow zoom; each with intensity and where it applies), and the outro fill. Plans made before settings existed keep the original card layout.
+
+**Renderer.** For plans with settings, `hyperframes_adapter/studio_layout.py` writes a full-canvas composition: the teacher cropped around where the teacher is (measured from motion in the lesson), a blurred frame of the lesson behind it, full-screen B-roll, hard cuts, captions with the spoken word highlighted, and effects as CSS filters, overlays and GSAP tweens. The outro is framed over a blurred copy of itself and the music continues under it. HyperFrames is retried once if its capture browser dies.
+
+**Music library.** `assets/music_library/` holds tracks taken from Wikimedia Commons through the engine's licence and instrumental gate (`deploy/build_music_library.py`); `library.json` records title, author, licence and source page. Categories with no track had no candidate that passed the gate. Custom music: `kind: "music"` uploads (MP3, WAV, M4A, AAC; 5 s to 15 min; up to 50 MB), checked with ffprobe like videos.
+
+**Editing assistant** (optional, `api/app/processing/assistant.py`). English or Hinglish instructions become structured operations (move, remove, shift, change duration, music volume, effects, captions, framing) that are validated and applied through the normal edit path, so each change is a new plan version and "Undo last change" restores the previous one as another version. A clip moved onto the next one pushes that one later as a visible extra step. Unclear requests get a question. Gemini is used only if `GEMINI_API_KEY` is set on the API service; otherwise the built-in rules answer.
+
+**Quality report.** After each render `quality_report.json` records canvas, duration, decoding, black frames, clipping, audio continuity, B-roll visibility, caption visibility and position, hard cuts, outro framing and outro music. Hard failures stop the render from being marked completed.
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| POST | `/api/sessions/{id}/editing-plan/edits` | Now also accepts `settings` (partial) and per-placement `target_phrase` / `duration_seconds`. |
+| POST | `/api/sessions/{id}/assistant/propose` | Instruction → understood text and operations, or a question. Changes nothing. |
+| POST | `/api/sessions/{id}/assistant/apply` | Apply proposed operations as a new version. |
+| POST | `/api/sessions/{id}/assistant/undo` | Restore the parent version as a new version. |
+| GET | `/api/music/library`, `/api/music/library/{id}/preview` | Bundled tracks and previews. |
+| GET | `/api/uploads/{id}/preview-url` | Signed preview of one of your uploads. |
+
 ## What the studio does not do
 
 It does not batch-render, and the repository does not deploy itself: the owner connects the accounts in `deploy/DEPLOYMENT.md`. Model weights are downloaded only while building the worker image. Automated tests replace the transcription provider, the footage selector, the model worker, and the HyperFrames CLI. Every other step runs the real code on small generated clips. Mode A footage selection is unchanged.

@@ -8,17 +8,20 @@ from pathlib import Path
 
 from app.errors import StudioError
 from app.processing.plan_adapt import (
+    BACK_TO_BACK_MIN,
+    MIN_CUTAWAY,
     build_engine_plan,
     engine_broll_cap,
     public_plan,
     reconcile,
     validate_envelope,
 )
+from app.processing.director import find_phrase, phrase_at
+from app.processing.settings import merge
 from app.processing.titles import clean_title, title_record
 from app.processing.versions import load_version, save_version
 from app.storage import StudioStore
 
-MIN_CUTAWAY = 2.0
 TOLERANCE = 0.05
 RENDER_ACTIVE = {"render_queued", "preparing", "composing", "rendering", "verifying", "assembling_outro"}
 
@@ -137,6 +140,19 @@ def apply_edits(store: StudioStore, session_id: str, owner: str, body: dict, loc
             end = _number(raw.get("speech_end"), "Timeline end")
             source_in = _number(raw.get("source_in"), "Source in")
             source_out = _number(raw.get("source_out"), "Source out")
+            override = None
+            if raw.get("target_phrase"):
+                target = str(raw["target_phrase"])[:200]
+                found = find_phrase(transcript, target)
+                if found is None:
+                    raise StudioError(422, "phrase_not_found", f"{info['filename']}: “{target}” was not found in the transcript.")
+                length = _number(raw["duration_seconds"], "Duration") if raw.get("duration_seconds") is not None else round(end - start, 3)
+                start = found["start"]
+                end = round(min(start + length, duration), 3)
+                source_out = round(min(source_in + (end - start), info["clip_duration"]), 3)
+                if source_out - source_in < end - start - 1e-3:
+                    source_in = round(max(0.0, source_out - (end - start)), 3)
+                override = {"target_phrase": target, "matched_phrase": found["phrase"], "by": "user", "duration_seconds": round(end - start, 3)}
             old = previous.get(asset_id) or {}
             unchanged = bool(old) and all(abs(float(old.get(key) or 0) - value) < 1e-3 for key, value in (("speech_start", start), ("speech_end", end), ("source_in", source_in), ("source_out", source_out)))
             row = dict(old) if unchanged else {
@@ -171,13 +187,21 @@ def apply_edits(store: StudioStore, session_id: str, owner: str, body: dict, loc
                 row["page_url"] = info.get("page_url") or ""
             if approval != old.get("approval") or not unchanged:
                 row["approved_by"] = "user"
+            if not unchanged:
+                spoken = phrase_at(transcript, start)
+                if spoken:
+                    row.update({"matched_phrase": spoken["phrase"], "phrase_start": spoken["phrase_start"], "phrase_end": spoken["phrase_end"], "segment_ids": spoken["segment_ids"]})
+                row["placement_rule"] = "user"
+            if override:
+                row["user_override"] = override
+                row["explanation"] = f"Placed by the user on “{override['matched_phrase']}”." + (f" Earlier evidence: {old['explanation']}" if old.get("explanation") else "")
             row.pop("reason", None)
             row.pop("trimmed", None)
             if approval == "rejected":
                 row["reason"] = "Rejected in the Studio review; the teacher stays on screen."
                 rejected.append(row)
                 continue
-            if start < 0 or end > duration + 1e-3 or end - start < MIN_CUTAWAY:
+            if start < 0 or end > duration + 1e-3 or end - start < BACK_TO_BACK_MIN - 1e-6:
                 raise StudioError(422, "invalid_timeline", f"{info['filename']}: the cutaway must last at least {MIN_CUTAWAY:.0f} s inside the lesson (0–{duration:.2f} s).")
             if source_in < 0 or source_out > info["clip_duration"] + 1e-3 or source_out <= source_in:
                 raise StudioError(422, "invalid_source", f"{info['filename']}: the source interval must lie inside the clip (0–{info['clip_duration']:.2f} s).")
@@ -188,16 +212,34 @@ def apply_edits(store: StudioStore, session_id: str, owner: str, body: dict, loc
         for left, right in zip(approved, approved[1:]):
             if right["speech_start"] < left["speech_end"] - 1e-3:
                 raise StudioError(422, "overlapping_cutaways", f"{left['filename']} and {right['filename']} overlap on the timeline.")
+        for index, item in enumerate(approved):
+            if item["speech_end"] - item["speech_start"] >= MIN_CUTAWAY - 1e-6:
+                continue
+            following = approved[index + 1] if index + 1 < len(approved) else None
+            if following is None or following["speech_start"] - item["speech_end"] > 0.05:
+                raise StudioError(422, "invalid_timeline", f"{item['filename']}: a cutaway shorter than {MIN_CUTAWAY:.0f} s must run straight into the next cutaway.")
         covered = sum(item["speech_end"] - item["speech_start"] for item in approved)
         cap = engine_broll_cap()
         if covered > cap * duration + 1e-3:
             raise StudioError(422, "broll_cap", f"Cutaways would cover {covered:.1f} s, over the {cap:.0%} limit of {cap * duration:.1f} s.")
 
         title = dict(current.get("title") or title_record("", "none"))
-        if "title" in body:
+        if "title" in body and not (body.get("origin") == "undo" and (body.get("title") or "") == title.get("text", "")):
             text = clean_title(body.get("title"))
             title = title_record(text, "user") | {"suggestion": (current.get("title") or {}).get("suggestion")}
-        engine_plan = build_engine_plan(transcript, _assets(record["mode"], approved, library), duration, title["text"])
+        settings = None if body.get("clear_settings") else current.get("settings")
+        if body.get("settings") is not None or settings is not None:
+            settings = merge(settings, body.get("settings"))
+            if settings["music"]["source"] == "upload":
+                music = store.get_upload(settings["music"]["upload_id"], owner)
+                if music.get("kind") != "music" or music.get("validation_status") != "valid":
+                    raise StudioError(422, "invalid_settings", "The music upload is not a validated audio file.")
+            if settings["music"]["source"] == "library":
+                from app.services.music import library_track
+
+                library_track(settings["music"]["track_id"])
+        max_words = settings["captions"]["max_words"] if settings else 3
+        engine_plan = build_engine_plan(transcript, _assets(record["mode"], approved, library), duration, title["text"], max_words)
         kept, dropped = reconcile(approved, engine_plan)
         if dropped or any(item.get("trimmed") for item in kept):
             raise StudioError(422, "builder_changed_plan", "The plan builder could not keep every cutaway as requested. Shorten or move them.")
@@ -209,17 +251,20 @@ def apply_edits(store: StudioStore, session_id: str, owner: str, body: dict, loc
         for key in ("visual_analysis",):
             if key in current["studio"]:
                 envelope[key] = current["studio"][key]
+        if body.get("assistant_operations"):
+            envelope["assistant_operations"] = body["assistant_operations"]
         version = save_version(
             work,
             session=record,
             engine_plan=engine_plan,
             studio=envelope,
-            origin="manual_edit",
+            origin=body.get("origin") if body.get("origin") in {"assistant", "undo"} else "manual_edit",
             parent_version_id=base,
             source_hashes=current.get("source_hashes") or {},
             matching_config=current.get("matching_config") or {},
             title=title,
             make_current=True,
+            settings=settings,
         )
         from app.processing.jobs import _make_current
 

@@ -9,6 +9,7 @@
 !saarthi_video_engine/schemas/
 !saarthi_video_engine/src/
 !saarthi_video_engine/deploy/
+!saarthi_video_engine/assets/music_library/
 !saarthi_video_engine/run_phase4.py
 !saarthi_video_engine/run_phase5.py
 !saarthi_video_engine/outputs/dr_shivin_phase5/asset_cache/candidates.json

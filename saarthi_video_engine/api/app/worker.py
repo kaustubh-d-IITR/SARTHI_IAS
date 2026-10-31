@@ -120,7 +120,7 @@ def _record_render(store: StudioStore, session_id: str, state: dict, job_id: str
     if not render_id:
         return
     now = utcnow()
-    details = {key: state.get(key) for key in ("metadata", "audio_verification", "outro", "title", "message", "approved_broll_placements", "lesson_duration_seconds") if key in state}
+    details = {key: state.get(key) for key in ("metadata", "audio_verification", "outro", "title", "message", "approved_broll_placements", "lesson_duration_seconds", "quality") if key in state}
     values = {
         "status": state.get("status") or "unknown",
         "plan_version_id": state.get("plan_version_id"),
@@ -192,7 +192,7 @@ def _broll_hashes(store: StudioStore, record: dict) -> list[str]:
 
 def _cleanup_scratch(store: StudioStore, record: dict, render_id: str | None = None) -> None:
     """Free the worker's scratch disk once results are in storage. Storage itself is untouched."""
-    if store.workspace.passthrough:
+    if store.workspace.passthrough or os.environ.get("STUDIO_KEEP_SCRATCH") == "1":
         return
     sid = record["session_id"]
     targets = [store.root / "work" / sid, store.root / "renders" / sid]

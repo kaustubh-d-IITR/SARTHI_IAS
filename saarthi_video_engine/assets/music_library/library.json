@@ -1,0 +1,84 @@
+{
+  "source": "Wikimedia Commons via assets.music_commons licence gate",
+  "tracks": [
+    {
+      "track_id": "calm_educational-98a809bcf0",
+      "title": "Audionautix-com-ccby-majesticpiano",
+      "artist": "Created by Jason Shaw. Released under Creative Commons Attribution License 3.0. Required credit: \"music by audionautix.com\". A signed release form is available at  http://audionautix.com",
+      "category": "calm_educational",
+      "duration_seconds": 61.41,
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AAudionautix-com-ccby-majesticpiano.mp3",
+      "file": "inspirational-audionautix-com-ccby-majesticpiano.ogg",
+      "sha256": "98a809bcf0ea1f104744a0bbdffd8ff9e021a235a27e388a1ef90a21b50a2667",
+      "trimmed_from_seconds": 61.42
+    },
+    {
+      "track_id": "inspirational-f0d059aefb",
+      "title": "Infraction - The Farmer (Acoustic Folk Instrumental)",
+      "artist": "Infraction - No Copyright Music",
+      "category": "inspirational",
+      "duration_seconds": 150.0,
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AInfraction_-_The_Farmer_%28Acoustic_Folk_Instrumental%29.opus",
+      "file": "inspirational-infraction-the-farmer-acoustic-folk-instrumental.ogg",
+      "sha256": "f0d059aefbc84d6fae1ea03273e3bbd0e6bed0bca9a9bfc7dcaa017ab4bb0889",
+      "trimmed_from_seconds": 151.05
+    },
+    {
+      "track_id": "cinematic-6cd234af17",
+      "title": "The March Of The Final Battle by MusicLFiles",
+      "artist": "MusicLFiles",
+      "category": "cinematic",
+      "duration_seconds": 135.41,
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AThe_March_Of_The_Final_Battle_by_MusicLFiles.ogg",
+      "file": "cinematic-the-march-of-the-final-battle-by-musiclfiles.ogg",
+      "sha256": "6cd234af17411530b113c5e637f43d224b9316ff3e45d07ed4df2098efe3ad9e",
+      "trimmed_from_seconds": 135.41
+    },
+    {
+      "track_id": "cinematic-45b0ee819a",
+      "title": "Cj Aist - Epic battle",
+      "artist": "Cj Aist",
+      "category": "cinematic",
+      "duration_seconds": 141.27,
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3ACj_Aist_-_Epic_battle.mp3",
+      "file": "cinematic-cj-aist-epic-battle.ogg",
+      "sha256": "45b0ee819a835eb7a59a8bc6b3d70e20fa7845ec91b79b3851e1673dbc2d2d9b",
+      "trimmed_from_seconds": 141.27
+    },
+    {
+      "track_id": "documentary-7ef897c8bd",
+      "title": "Infraction - Landforms",
+      "artist": "Infraction - No Copyright Music",
+      "category": "documentary",
+      "duration_seconds": 150.0,
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AInfraction_-_Landforms.opus",
+      "file": "documentary-infraction-landforms.ogg",
+      "sha256": "7ef897c8bd3e2ded76c3ef36109c1f39d3a2c8fc15e44998cef37a97249fb20d",
+      "trimmed_from_seconds": 155.03
+    },
+    {
+      "track_id": "minimal_ambience-4ed740dbc7",
+      "title": "Placid Ambient by MusicLFiles",
+      "artist": "MusicLFiles",
+      "category": "minimal_ambience",
+      "duration_seconds": 141.0,
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3APlacid_Ambient_by_MusicLFiles.ogg",
+      "file": "documentary-placid-ambient-by-musiclfiles.ogg",
+      "sha256": "4ed740dbc780d850b4aeae6680a19857d9255f8227578d9f8c5dceb6ce78857e",
+      "trimmed_from_seconds": 141.0
+    }
+  ],
+  "note": "Categories with no track here had no Commons candidate that passed the engine's licence and instrumental gate."
+}

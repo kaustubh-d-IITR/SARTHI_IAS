@@ -63,6 +63,7 @@ COPY saarthi_video_engine/run_phase4.py saarthi_video_engine/run_phase5.py saart
 COPY saarthi_video_engine/outputs/dr_shivin_phase5/asset_cache/candidates.json \
      saarthi_video_engine/outputs/dr_shivin_phase5/asset_cache/inspire-action-yuri-megis.ogg \
      saarthi_video_engine/outputs/dr_shivin_phase5/asset_cache/
+COPY saarthi_video_engine/assets/music_library/ saarthi_video_engine/assets/music_library/
 COPY saarthi_video_engine/api/ saarthi_video_engine/api/
 
 WORKDIR /srv/saarthi_video_engine/api

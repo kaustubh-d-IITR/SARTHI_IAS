@@ -1,0 +1,872 @@
+[
+  {
+    "category": "motivational",
+    "title": "File:Audionautix-com-ccby-corporationmotivation.mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Egmont Overture (ISRC USUAN1200069).mp3",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Egmont Overture Finale (ISRC USUAN1200070).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Rafael Krux - Inspiring Teaser (cc-by) (filmmusic).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Rafael Krux - The Epic 2.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Rafael Krux - Uplifting Blockbuster (cc-by) (filmmusic).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Rumination (ISRC USUAN1100354).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Scott Buckley - Born Of The Sky.oga",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Second Coming - no percussion (ISRC USUAN1100674).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "motivational",
+    "title": "File:\"Happy Feelings Rag\" (1912), by Dan Desdunes.opus",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Awaiting Return (ISRC USUAN1100318).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Bright Wish (ISRC USUAN1100377).mp3",
+    "rejected": "shorter than 45 s"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Continue Life (ISRC USUAN1100282).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:MacLeod, Kevin - Snowdrop.ogg",
+    "rejected": "license CC BY 3.0 us is not on the allow list"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Midday Dance (ISRC USUAN1100160).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Midsummer Sky (ISRC USUAN1100158).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Piano Between (ISRC USUAN1100490).mp3",
+    "rejected": "shorter than 45 s"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Rafael Krux - Inspiring Advertising - Upbeat Summer Corporate (cc-by) (filmmusic).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Rose Leaf Rag by Scott Joplin (1907).opus",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Soft Corporate by MusicLFiles.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Wagner Bridal Chorus - piano (ISRC USUAN1100022).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Chris Zabriskie - 08 - That Hopeful Future Is All Ive Ever Known.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Eternal Hope (ISRC USUAN1100238).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Fantastic World by WinnieTheMoog.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Horizon Flare by Alexander Nakarada.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Love Song (ISRC USUAN1100170).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Scott Buckley - Felicity.oga",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Scott Buckley - Signal To Noise (nomelody mix).oga",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "motivational",
+    "title": "File:Scott Buckley - Signal to Noise.oga",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "calm_educational",
+    "title": "File:MusicLFiles - Painful Path to the Light.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "calm_educational",
+    "title": "File:Oh, Little Town of Bethlehem (Kevin MacLeod) (ISRC USUAN1100307).oga",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "calm_educational",
+    "title": "File:Tea Roots (ISRC USUAN1100472).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "calm_educational",
+    "title": "File:Tea Roots (MacLeod, Kevin) (ISRC USUAN1100472).oga",
+    "rejected": "license CC BY 3.0 us is not on the allow list"
+  },
+  {
+    "category": "calm_educational",
+    "title": "File:299 - Czerny's Etude for classroom and life.ogg",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "calm_educational",
+    "title": "File:Invention 2P 14th Sostenuto.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "calm_educational",
+    "title": "File:Soft Corporate by MusicLFiles.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Danse Macabre - Busy Strings (ISRC USUAN1100556).mp3",
+    "rejected": "shorter than 45 s"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Danse Macabre - Low Strings Finale (ISRC USUAN1100552).mp3",
+    "rejected": "shorter than 45 s"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Dark Dance (ISRC USUAN1100398).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Dark Standoff (ISRC USUAN1100268).mp3",
+    "rejected": "shorter than 45 s"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Dark Times (ISRC USUAN1100747).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Dark Walk (ISRC USUAN1100468).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Grave Blow (ISRC USUAN1100402).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Grave Matters (ISRC USUAN1100215).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Inleiding BOHO Strings olv. David Ramael (audio).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Passing Action (ISRC USUAN1100117).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Satiate - only strings (ISRC USUAN1200056).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Scott Buckley – The Long Dark (Ambient Neoclassical Piano).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:52 Hz Whale Normal Speed.wav",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Blue Whale NE Pacific 1x.oga",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Blue Whale West Pacific 1x.oga",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Blue whale atlantic1.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Blue whale atlantic2.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Blue whale atlantic2 1x.oga",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Blue whale atlantic3 1x.oga",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Dramatic Trailer by Rafael Krux.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Humpback whale moo.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Inleiding Malmö Symphony Orchestra - La Damnation de Faust (audio).mp3",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Inleiding Swedish Radio Symphony Orchestra olv. Daniel Harding (audio).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Killer whale simple.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Bach Invention 2P 14th.ogg",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:KV279 1 P1.ogg",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:KV279 1 P2.ogg",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Komiku - 32 - Sad walk with sad piano.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Lysenko-Sadness elegy (piano).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Night on the Docks - Piano (ISRC USUAN1100135).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Patrick Lieberkind - Distant Sad piano.wav",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Pupil Yu,Zhang's edition - e minor sonata of Sir Haydn.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Rainy Sad.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Sad Robot Piano (Antti Luode).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Sad Trio (ISRC USUAN1100089).mp3",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:The Dying Swan - black angel JMC Han.ogg",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Bad Voltage 3×06- Earballs (IA bad-voltage-3x-06).mp3",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "serious_current_affairs",
+    "title": "File:Inleiding Orkest van de Achttiende Eeuw & Cappella Amsterdam - Don Giovanni (audio).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Ey Iran (Instrumental).ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Jana Gana Mana (instrumental).oga",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Phleng Chat Thai (Instrumental) - Rabbit Gramophone record.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Phleng Chat Thai (Instrumental) E-flat.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Phleng Chat Thai (Intro+Instrumental) - Rabbit Gramophone record.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Phleng Chat Thai (Intro+Instrumental) E-flat.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Phleng Chat Thai (instrumental) - The Orchestra of the Fine Arts Department (1958).oga",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Sansoen Phra Barami (Instrumental) - Parttayakoson Band CTR 224.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Sansoen Phra Barami (Instrumental) - Rabbit Gramophone record (1960s).oga",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Sansoen Phra Barami (Instrumental) - The Orchestra of the Fine Arts Department (1958).oga",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Sorood-e Shahanshahi Iran (Instrumental).ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:The Internationale (1977 instrumental).ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Carl Maria von Weber - der freischutz, j. 277 - overture.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. Autumn Alley (orchestra).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. Charms of the Night Forest (orchestra).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. Chasing the Time (orchestra).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. Dialogue with the Sun (orchestra).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. East wind (orchestra).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. Express to the Unknown (orchestra).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. In the Maze of the Cities (orchestra).oga",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Lukyanenko O. V. Sunbeams inn the Stained glass (orchestra).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Modest Mussorgsky - night on bald mountain.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Sacred Battle Loop by MusicLFiles.ogg",
+    "rejected": "shorter than 45 s"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Violinist CARRIE REHKOPF-TCHAIKOVSKY VIOLIN CONCERTO 3rd mvt.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Ada Jones and Billy Murray - Shine On, Harvest Moon.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Alligatorbellowedit.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Apollo13-wehaveaproblem.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Apollo13-wehaveaproblem edit 1.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Dove With Spanish Sense in Piano JMC.Han.ogg",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Fast Piano (Antti Luode).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Hungarian Dances - No. 5 in F Sharp Minor (Collections in piano) JMC,Han.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:I Want to Go Back to Michigan.ogg",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Phrase de Neil Armstrong.oga",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Runner.mid",
+    "rejected": "mime audio/midi is not audio"
+  },
+  {
+    "category": "energetic",
+    "title": "File:The Dying Swan - black angel JMC Han.ogg",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Wikipedia - Drug policy (spoken by AI voice).mp3",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Cherried pickles on the move (chocolate covered cherry chance mix) finished instrumental.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Galope engraçado.wav",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "energetic",
+    "title": "File:\"Duo Caliz\" (Luis Manuel Molina de Varona y Vicente Monterrey). Interpreta \"Hey Jude\".ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "energetic",
+    "title": "File:4th Street Exit - Systems Go - United States Air Force Band of Flight.mp3",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Axletree - 02 - Rock pools poetic interlude.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "energetic",
+    "title": "File:En-Grammy Award for Best Hard Rock Metal Performance Vocal or Instrumental-article.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Hyde – Untitled (Pendulum-inspired D&B rock-pop instrumental).opus",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:John Bartmann - 17 - Secret Agent Rock.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Monplaisir - 08 - This is not a rock song.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Pipe Choir - 07 - Monachine Instrumental.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Pipe Choir - 10 - Gemini Instrumental.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Rock Me moses instrumental (Antti Luode).mp3",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "energetic",
+    "title": "File:Steve Combs - 25 - New Rock Extended Background Mix.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "energetic",
+    "title": "File:ÁNGELES Y CIELO (MARCELO TURKO CHAÍN-2007-.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:AI-EmeraldApple - Galactic Ambient (Scifi Ambient Music with AI Art Showcase - Lost Among the Vast Galaxy).opus",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Alex-Productions - Deep (Dark Ambient Background music).oga",
+    "rejected": "title or description indicates vocals or speech"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ambient music test, Yamaha CK61.flac",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Compilation of ambient music improvisations - Kid Pochoclo.opus",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Dreamstate Logic - Zero Point (space ambient, dark ambient).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Fantasy Medieval Ambient Music - The Dwarven Mine.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Forgotten Dawn – Dark Ambient Lo-Fi Music (1 Hour).ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Hypnotic ambient electronic music by MusicLM.mp3",
+    "rejected": "license url is missing"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Paul Kuniholm Ambient Seattle 2024 (WayVSumtInThWay).wav",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Raspberrymusic - Ambient (10 minutes).flac",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Terminus Void - Inception (Dystopian Cyberpunk Space Ambient Music similar to Blade Runner soundtrack music).opus",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Vastopia - Dark Ambient Music for Deep Relaxation and Focus.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:AI-EmeraldApple - Galactic Ambient (Scifi Ambient Music with AI Art Showcase - Lost Among the Vast Galaxy).opus",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:John Bartmann - bee-hive-pad-master (audio).ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Scott Buckley - Petrichor.oga",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Patricia Taxxon - CGCTCGCHCGCTCGOGTGHGTDTHTOTHEHOHDHOEODOEODEDEDEDE.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Patricia Taxxon - GEGCGEGHGEGCGEDECEHECOCHCDCHTHDHOHDTDODTDOTOTOTOT.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Patricia Taxxon - GEGTGEGHGEGTGECETEHETOTHTCTHDHCHOHCDCOCDCODODODOD.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Patricia Taxxon - GOGCGOGHGOGCGOEOCOHOCDCHCECHTHEHDHETEDETEDTDTDTDT.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Patricia Taxxon - OCOTOCODOCOTOCECTCDCTHTDTETDGDEDHDEGEHEGEHGHGHGHG.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Patricia Taxxon - THTCTHTOTHTCTHDHCHOHCECOCDCOGODOEODGDEDGDEGEGEGEG.ogg",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ten Skies - a bird flies over Gorman.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ten Skies - hurried visitors.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ten Skies - la douceur.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ten Skies - lonely blue, holy blue.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ten Skies - smokestacks.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ten Skies - the view from below.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Ambient music test, Yamaha CK61.flac",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Chris Zabriskie - 01 - Direct to Video.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Chris Zabriskie - 03 - I Dont See the Branches I See the Leaves.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Chris Zabriskie - 04 - I Want to Fall in Love on Snapchat.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Chris Zabriskie - 05 - But Enough About Me Bill Paxton.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Chris Zabriskie - 06 - God Be With You Till We Meet Again.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Chris Zabriskie - 07 - Its Always Too Late to Start Over.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Compilation of ambient music improvisations - Kid Pochoclo.opus",
+    "rejected": "audio is over 15 MB"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Kai Engel - 02 - Meekness.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Scott Buckley – The Long Dark (Ambient Neoclassical Piano).ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Spiritual Ambient by MusicLFiles.ogg",
+    "rejected": "download failed (HTTPError)"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 01 - Precisamos de um plano.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 02 - The secret code is 5oy24u.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 03 - A imagem que temos de ns e dos outros.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 04 - Lang ist die Nacht der Leidenschaft.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 05 - Afraid of losing what I never owned.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 06 - Die Illusion des Vertrauens.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 07 - No sudden movements.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 08 - A chuva do ser ou como tudo correu mal.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 09 - Krankenwagen im Stau.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 10 - Answers to unasked questions.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 11 - Selbstheilend.ogg",
+    "rejected": "title does not say the track is instrumental"
+  },
+  {
+    "category": "minimal_ambience",
+    "title": "File:Rui - 12 - Caress me to sleep.ogg",
+    "rejected": "title does not say the track is instrumental"
+  }
+]

@@ -77,6 +77,20 @@ function Finished({
           <dd>{render.title?.text || "No title"}</dd>
         </div>
       </dl>
+      {render.quality && (
+        <details className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-sm" open={render.quality.status !== "passed"}>
+          <summary className="cursor-pointer">
+            Quality check: {render.quality.status === "passed" ? "all checks passed" : `${render.quality.warnings} warning${render.quality.warnings === 1 ? "" : "s"}`}
+          </summary>
+          <ul className="mt-2 grid gap-1">
+            {render.quality.checks.map((check, index) => (
+              <li key={`${check.name}-${index}`} className={check.status === "passed" ? "text-slate-600" : check.status === "warning" ? "text-amber-800" : "text-red-700"}>
+                {check.status === "passed" ? "✓" : check.status === "warning" ? "!" : "✗"} {check.detail}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
       {videoUrl ? (
         <>
           <video className="mt-4 max-h-[70vh] w-full rounded-xl bg-black" controls playsInline preload="metadata" src={videoUrl} aria-label="Rendered video preview" onError={onVideoError} />

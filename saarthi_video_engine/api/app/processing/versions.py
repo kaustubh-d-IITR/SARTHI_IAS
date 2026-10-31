@@ -40,6 +40,7 @@ def save_version(
     matching_config: dict,
     title: dict,
     make_current: bool,
+    settings: dict | None = None,
 ) -> dict:
     folder = plans_dir(work)
     number = len(list(folder.glob("*.json"))) + 1
@@ -48,6 +49,8 @@ def save_version(
     studio = dict(studio)
     studio["plan_version"] = {"version_id": version_id, "number": number, "parent_version_id": parent_version_id, "origin": origin}
     studio["title"] = title
+    if settings is not None:
+        studio["settings"] = settings
     version = {
         "version_id": version_id,
         "number": number,
@@ -64,6 +67,8 @@ def save_version(
         "engine_plan": engine_plan,
         "studio": studio,
     }
+    if settings is not None:
+        version["settings"] = settings
     path = folder / f"{version_id}.json"
     with path.open("x", encoding="utf-8") as handle:
         json.dump(version, handle, indent=2, ensure_ascii=False)

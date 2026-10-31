@@ -1,0 +1,607 @@
+{
+ "language": "hin",
+ "method": "elevenlabs",
+ "model": "scribe_v2",
+ "segments": [
+  {
+   "id": "a0",
+   "text": "ना ही मैंने newspaper पढ़ा और ना ही मैंने NCERT पढ़ी and I would have just started preparing",
+   "original_text": "ना ही मैंने newspaper पढ़ा और ना ही मैंने NCERT पढ़ी and I would have just started preparing",
+   "start": 0.12,
+   "end": 3.84,
+   "timing_precision": "word",
+   "words": [
+    {
+     "text": "ना",
+     "start": 0.12,
+     "end": 0.24
+    },
+    {
+     "text": "ही",
+     "start": 0.28,
+     "end": 0.36
+    },
+    {
+     "text": "मैंने",
+     "start": 0.4,
+     "end": 0.54
+    },
+    {
+     "text": "newspaper",
+     "start": 0.58,
+     "end": 0.92
+    },
+    {
+     "text": "पढ़ा",
+     "start": 0.98,
+     "end": 1.12
+    },
+    {
+     "text": "और",
+     "start": 1.14,
+     "end": 1.24
+    },
+    {
+     "text": "ना",
+     "start": 1.26,
+     "end": 1.34
+    },
+    {
+     "text": "ही",
+     "start": 1.36,
+     "end": 1.44
+    },
+    {
+     "text": "मैंने",
+     "start": 1.48,
+     "end": 1.6
+    },
+    {
+     "text": "NCERT",
+     "start": 1.68,
+     "end": 2.06
+    },
+    {
+     "text": "पढ़ी",
+     "start": 2.08,
+     "end": 2.24
+    },
+    {
+     "text": "and",
+     "start": 2.42,
+     "end": 2.52
+    },
+    {
+     "text": "I",
+     "start": 2.58,
+     "end": 2.64
+    },
+    {
+     "text": "would",
+     "start": 2.66,
+     "end": 2.76
+    },
+    {
+     "text": "have",
+     "start": 2.78,
+     "end": 2.92
+    },
+    {
+     "text": "just",
+     "start": 2.96,
+     "end": 3.1
+    },
+    {
+     "text": "started",
+     "start": 3.16,
+     "end": 3.44
+    },
+    {
+     "text": "preparing",
+     "start": 3.5,
+     "end": 3.84
+    }
+   ]
+  },
+  {
+   "id": "a1",
+   "text": "blindly। जब मैंने decide किया था prepare करने के लिए मैंने भी YouTube खोला था। मैंने exam का",
+   "original_text": "blindly। जब मैंने decide किया था prepare करने के लिए मैंने भी YouTube खोला था। मैंने exam का",
+   "start": 3.92,
+   "end": 7.66,
+   "timing_precision": "word",
+   "words": [
+    {
+     "text": "blindly।",
+     "start": 3.92,
+     "end": 4.38
+    },
+    {
+     "text": "जब",
+     "start": 4.42,
+     "end": 4.5
+    },
+    {
+     "text": "मैंने",
+     "start": 4.54,
+     "end": 4.7
+    },
+    {
+     "text": "decide",
+     "start": 4.74,
+     "end": 5.04
+    },
+    {
+     "text": "किया",
+     "start": 5.1,
+     "end": 5.2
+    },
+    {
+     "text": "था",
+     "start": 5.24,
+     "end": 5.32
+    },
+    {
+     "text": "prepare",
+     "start": 5.34,
+     "end": 5.6
+    },
+    {
+     "text": "करने",
+     "start": 5.66,
+     "end": 5.84
+    },
+    {
+     "text": "के",
+     "start": 5.88,
+     "end": 5.94
+    },
+    {
+     "text": "लिए",
+     "start": 5.96,
+     "end": 6.04
+    },
+    {
+     "text": "मैंने",
+     "start": 6.08,
+     "end": 6.24
+    },
+    {
+     "text": "भी",
+     "start": 6.28,
+     "end": 6.34
+    },
+    {
+     "text": "YouTube",
+     "start": 6.4,
+     "end": 6.66
+    },
+    {
+     "text": "खोला",
+     "start": 6.7,
+     "end": 6.88
+    },
+    {
+     "text": "था।",
+     "start": 6.92,
+     "end": 7.12
+    },
+    {
+     "text": "मैंने",
+     "start": 7.14,
+     "end": 7.28
+    },
+    {
+     "text": "exam",
+     "start": 7.3,
+     "end": 7.52
+    },
+    {
+     "text": "का",
+     "start": 7.58,
+     "end": 7.66
+    }
+   ]
+  },
+  {
+   "id": "a2",
+   "text": "format समझा था। अच्छा चार GS के paper हैं, एक optional का paper है, एक essay का paper",
+   "original_text": "format समझा था। अच्छा चार GS के paper हैं, एक optional का paper है, एक essay का paper",
+   "start": 7.72,
+   "end": 11.36,
+   "timing_precision": "word",
+   "words": [
+    {
+     "text": "format",
+     "start": 7.72,
+     "end": 8.039
+    },
+    {
+     "text": "समझा",
+     "start": 8.08,
+     "end": 8.28
+    },
+    {
+     "text": "था।",
+     "start": 8.34,
+     "end": 8.4
+    },
+    {
+     "text": "अच्छा",
+     "start": 8.42,
+     "end": 8.64
+    },
+    {
+     "text": "चार",
+     "start": 8.7,
+     "end": 8.88
+    },
+    {
+     "text": "GS",
+     "start": 8.96,
+     "end": 9.18
+    },
+    {
+     "text": "के",
+     "start": 9.22,
+     "end": 9.3
+    },
+    {
+     "text": "paper",
+     "start": 9.34,
+     "end": 9.58
+    },
+    {
+     "text": "हैं,",
+     "start": 9.64,
+     "end": 9.74
+    },
+    {
+     "text": "एक",
+     "start": 9.78,
+     "end": 9.86
+    },
+    {
+     "text": "optional",
+     "start": 9.92,
+     "end": 10.14
+    },
+    {
+     "text": "का",
+     "start": 10.18,
+     "end": 10.26
+    },
+    {
+     "text": "paper",
+     "start": 10.28,
+     "end": 10.52
+    },
+    {
+     "text": "है,",
+     "start": 10.54,
+     "end": 10.6
+    },
+    {
+     "text": "एक",
+     "start": 10.64,
+     "end": 10.7
+    },
+    {
+     "text": "essay",
+     "start": 10.74,
+     "end": 10.96
+    },
+    {
+     "text": "का",
+     "start": 11.0,
+     "end": 11.08
+    },
+    {
+     "text": "paper",
+     "start": 11.12,
+     "end": 11.36
+    }
+   ]
+  },
+  {
+   "id": "a3",
+   "text": "है। Prelims में GS है, CSAT है और मुझे दो ही advice मिली सब कुछ सुनके। क्या advice",
+   "original_text": "है। Prelims में GS है, CSAT है और मुझे दो ही advice मिली सब कुछ सुनके। क्या advice",
+   "start": 11.4,
+   "end": 15.74,
+   "timing_precision": "word",
+   "words": [
+    {
+     "text": "है।",
+     "start": 11.4,
+     "end": 11.56
+    },
+    {
+     "text": "Prelims",
+     "start": 11.58,
+     "end": 11.9
+    },
+    {
+     "text": "में",
+     "start": 11.96,
+     "end": 12.06
+    },
+    {
+     "text": "GS",
+     "start": 12.12,
+     "end": 12.36
+    },
+    {
+     "text": "है,",
+     "start": 12.4,
+     "end": 12.48
+    },
+    {
+     "text": "CSAT",
+     "start": 12.56,
+     "end": 12.96
+    },
+    {
+     "text": "है",
+     "start": 13.0,
+     "end": 13.12
+    },
+    {
+     "text": "और",
+     "start": 13.18,
+     "end": 13.28
+    },
+    {
+     "text": "मुझे",
+     "start": 13.34,
+     "end": 13.5
+    },
+    {
+     "text": "दो",
+     "start": 13.7,
+     "end": 13.84
+    },
+    {
+     "text": "ही",
+     "start": 13.88,
+     "end": 13.98
+    },
+    {
+     "text": "advice",
+     "start": 14.02,
+     "end": 14.34
+    },
+    {
+     "text": "मिली",
+     "start": 14.38,
+     "end": 14.54
+    },
+    {
+     "text": "सब",
+     "start": 14.58,
+     "end": 14.72
+    },
+    {
+     "text": "कुछ",
+     "start": 14.74,
+     "end": 14.86
+    },
+    {
+     "text": "सुनके।",
+     "start": 14.9,
+     "end": 15.24
+    },
+    {
+     "text": "क्या",
+     "start": 15.28,
+     "end": 15.38
+    },
+    {
+     "text": "advice",
+     "start": 15.42,
+     "end": 15.74
+    }
+   ]
+  },
+  {
+   "id": "a4",
+   "text": "मिली? यार newspaper पढ़ लो और NCERT पढ़ लो। I am going to the hospital, I am doing",
+   "original_text": "मिली? यार newspaper पढ़ लो और NCERT पढ़ लो। I am going to the hospital, I am doing",
+   "start": 15.78,
+   "end": 19.8,
+   "timing_precision": "word",
+   "words": [
+    {
+     "text": "मिली?",
+     "start": 15.78,
+     "end": 15.94
+    },
+    {
+     "text": "यार",
+     "start": 16.14,
+     "end": 16.4
+    },
+    {
+     "text": "newspaper",
+     "start": 16.46,
+     "end": 16.9
+    },
+    {
+     "text": "पढ़",
+     "start": 16.96,
+     "end": 17.1
+    },
+    {
+     "text": "लो",
+     "start": 17.16,
+     "end": 17.24
+    },
+    {
+     "text": "और",
+     "start": 17.44,
+     "end": 17.62
+    },
+    {
+     "text": "NCERT",
+     "start": 17.74,
+     "end": 18.16
+    },
+    {
+     "text": "पढ़",
+     "start": 18.18,
+     "end": 18.3
+    },
+    {
+     "text": "लो।",
+     "start": 18.36,
+     "end": 18.56
+    },
+    {
+     "text": "I",
+     "start": 18.6,
+     "end": 18.62
+    },
+    {
+     "text": "am",
+     "start": 18.62,
+     "end": 18.7
+    },
+    {
+     "text": "going",
+     "start": 18.74,
+     "end": 18.88
+    },
+    {
+     "text": "to",
+     "start": 18.9,
+     "end": 18.96
+    },
+    {
+     "text": "the",
+     "start": 19.0,
+     "end": 19.04
+    },
+    {
+     "text": "hospital,",
+     "start": 19.08,
+     "end": 19.46
+    },
+    {
+     "text": "I",
+     "start": 19.54,
+     "end": 19.56
+    },
+    {
+     "text": "am",
+     "start": 19.58,
+     "end": 19.64
+    },
+    {
+     "text": "doing",
+     "start": 19.66,
+     "end": 19.8
+    }
+   ]
+  },
+  {
+   "id": "a5",
+   "text": "a COVID duty, I am coming back, I am tired, I am exhausted. I have been wearing a",
+   "original_text": "a COVID duty, I am coming back, I am tired, I am exhausted. I have been wearing a",
+   "start": 19.86,
+   "end": 22.88,
+   "timing_precision": "word",
+   "words": [
+    {
+     "text": "a",
+     "start": 19.86,
+     "end": 19.92
+    },
+    {
+     "text": "COVID",
+     "start": 19.96,
+     "end": 20.16
+    },
+    {
+     "text": "duty,",
+     "start": 20.22,
+     "end": 20.4
+    },
+    {
+     "text": "I",
+     "start": 20.44,
+     "end": 20.48
+    },
+    {
+     "text": "am",
+     "start": 20.48,
+     "end": 20.58
+    },
+    {
+     "text": "coming",
+     "start": 20.62,
+     "end": 20.9
+    },
+    {
+     "text": "back,",
+     "start": 20.96,
+     "end": 21.12
+    },
+    {
+     "text": "I",
+     "start": 21.2,
+     "end": 21.22
+    },
+    {
+     "text": "am",
+     "start": 21.22,
+     "end": 21.28
+    },
+    {
+     "text": "tired,",
+     "start": 21.4,
+     "end": 21.72
+    },
+    {
+     "text": "I",
+     "start": 21.76,
+     "end": 21.78
+    },
+    {
+     "text": "am",
+     "start": 21.78,
+     "end": 21.82
+    },
+    {
+     "text": "exhausted.",
+     "start": 21.88,
+     "end": 22.24
+    },
+    {
+     "text": "I",
+     "start": 22.26,
+     "end": 22.26
+    },
+    {
+     "text": "have",
+     "start": 22.28,
+     "end": 22.36
+    },
+    {
+     "text": "been",
+     "start": 22.38,
+     "end": 22.48
+    },
+    {
+     "text": "wearing",
+     "start": 22.52,
+     "end": 22.76
+    },
+    {
+     "text": "a",
+     "start": 22.82,
+     "end": 22.88
+    }
+   ]
+  }
+ ]
+}
