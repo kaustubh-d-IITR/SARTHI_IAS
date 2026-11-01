@@ -197,6 +197,7 @@ export type Placement = {
   license?: string;
   page_url?: string;
   trimmed?: string;
+  adjusted?: string;
   reason?: string;
   matched_phrase?: string;
   phrase_start?: number;

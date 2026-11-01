@@ -47,7 +47,7 @@ def probe_video(path: Path) -> dict:
                 "-v",
                 "error",
                 "-show_entries",
-                "format=duration:stream=codec_type,width,height,avg_frame_rate",
+                "format=duration:stream=codec_type,width,height,avg_frame_rate,duration",
                 "-of",
                 "json",
                 str(path),
@@ -84,12 +84,20 @@ def probe_video(path: Path) -> dict:
         raise StudioError(422, "not_a_video", "The video duration could not be read.") from exc
     if duration <= 0:
         raise StudioError(422, "not_a_video", "The video duration is empty.")
-    return {
+    result = {
         "duration_seconds": duration,
         "width": width,
         "height": height,
         "frame_rate": _frame_rate(video.get("avg_frame_rate")),
     }
+    try:
+        stream_seconds = round(float(video.get("duration")), 3)
+    except (TypeError, ValueError):
+        stream_seconds = None
+    if stream_seconds and stream_seconds > 0:
+        # The picture can end before the container (longer audio); cutaways may only use the picture.
+        result["video_duration_seconds"] = stream_seconds
+    return result
 
 
 MUSIC_MIN_SECONDS = 5.0

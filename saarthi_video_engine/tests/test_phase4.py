@@ -96,6 +96,18 @@ class CaptionTests(unittest.TestCase):
         self.assertIn("bhai", pieces[0]["text"])
         self.assertNotIn("ک", pieces[0]["text"])
 
+    def test_short_english_words_are_split_into_caption_lines(self):
+        text = "a COVID duty, I am coming back, I am tired, I am exhausted. I have been wearing a"
+        words = [
+            {"text": token, "start": index * 0.2, "end": index * 0.2 + 0.15}
+            for index, token in enumerate(text.split())
+        ]
+        segment = _segment(0, 0, 4, text, words)
+        prepared = prepare_segment(segment, "en")
+        pieces = caption_pieces(segment, prepared, 3)
+        self.assertGreater(len(pieces), 4)
+        self.assertTrue(all(len(piece["text"].split()) <= 3 for piece in pieces))
+
     def test_repeated_token_loop_is_not_captioned(self):
         segment = _segment(0, 0, 20, "cha " * 40)
         prepared = prepare_segment(segment, "hi")

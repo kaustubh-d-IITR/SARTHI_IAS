@@ -118,6 +118,7 @@ def caption_pieces(segment: dict, prepared: dict, max_words: int = 3) -> list[di
     if not caption:
         return []
     words = []
+    short = 0
     for word in segment.get("words") or []:
         raw = (word.get("text") or "").strip()
         if not raw or raw.startswith("[") or raw.startswith("<"):
@@ -130,9 +131,11 @@ def caption_pieces(segment: dict, prepared: dict, max_words: int = 3) -> list[di
         if not isinstance(start, (int, float)) or not isinstance(end, (int, float)) or end <= start:
             continue
         words.append((shown, float(start), float(end)))
+        # English "I", "a", "am" are real words; only non-Latin letters count here.
+        if len(shown) <= 2 and not raw.isascii():
+            short += 1
     # Whisper often emits one Unicode letter per token for Urdu or Hindi.
     # Those tokens are not words, so the segment line is the caption.
-    short = sum(1 for shown, _start, _end in words if len(shown) <= 2)
     letterish = not words or short > len(words) * 0.4
     if letterish or len(words) <= 10:
         start = float(segment["start"])

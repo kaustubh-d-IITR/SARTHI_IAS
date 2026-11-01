@@ -126,14 +126,22 @@ export function PlanReview({
     setDrafts((rows) => rows.map((row) => (row.key === key ? { ...row, ...next } : row)));
   }
 
+  /** A cutaway plays its clip in real time and may never ask for footage past the clip's end. */
+  function fitSource(row: Draft, length: number, sourceIn: number): { length: number; source_in: number } {
+    const clip = row.clip_duration || catalogue.get(row.asset_id)?.duration_seconds || 0;
+    if (clip <= 0) return { length, source_in: Math.max(0, sourceIn) };
+    const fitted = Math.min(length, clip);
+    return { length: fitted, source_in: Math.max(0, Math.min(sourceIn, clip - fitted)) };
+  }
+
   function setTimeline(row: Draft, start: number, end: number) {
-    const length = Math.max(0, end - start);
-    patch(row.key, { speech_start: round(start), speech_end: round(end), source_out: round(row.source_in + length) });
+    const fit = fitSource(row, Math.max(0, end - start), row.source_in);
+    patch(row.key, { speech_start: round(start), speech_end: round(start + fit.length), source_in: round(fit.source_in), source_out: round(fit.source_in + fit.length) });
   }
 
   function setSource(row: Draft, sourceIn: number) {
-    const length = row.speech_end - row.speech_start;
-    patch(row.key, { source_in: round(sourceIn), source_out: round(sourceIn + length) });
+    const fit = fitSource(row, row.speech_end - row.speech_start, sourceIn);
+    patch(row.key, { source_in: round(fit.source_in), source_out: round(fit.source_in + fit.length) });
   }
 
   function changeAsset(row: Draft, assetId: string) {
@@ -312,6 +320,7 @@ export function PlanReview({
                     Evidence: {evidenceLabel(row.evidence)} · description {score(row.description_relevance)} · visual {score(row.visual_relevance)} · combined {score(row.score)}
                   </p>
                   {row.explanation && <p className="mt-1 text-slate-600">Why: {row.explanation}</p>}
+                  {row.adjusted && <p className="mt-1 text-amber-800">Fitted to the clip: {row.adjusted}</p>}
                   {row.trimmed && <p className="mt-1 text-amber-800">{row.trimmed}</p>}
                 </div>
               </div>

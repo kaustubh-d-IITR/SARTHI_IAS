@@ -22,6 +22,7 @@ from app.services.rendering.bridge import OPEN, UNDER_SPEECH, EngineBridge, Engi
 from app.storage import StudioStore
 
 CORRELATION_FLOOR = 0.90
+ONE_FRAME = 1 / 30 + 1e-3
 CANVAS = {"width": 720, "height": 1280, "fps": 30}
 PICTURE = {"show_teacher", "replace_with_broll"}
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -373,7 +374,13 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
     clip_seconds: dict[str, float] = {}
     for asset_id, clip in inputs["clips"].items():
         probe = _probe_media(bridge, clip["path"], f"B-roll clip {clip['filename']}")
-        clip_seconds[asset_id] = float(probe["format"]["duration"])
+        picture, _sound = _streams(probe)
+        lengths = [float(probe["format"]["duration"])]
+        try:
+            lengths.append(float((picture or {}).get("duration")))
+        except (TypeError, ValueError):
+            pass
+        clip_seconds[asset_id] = min(value for value in lengths if value > 0)
         if _HEX64.match(clip["sha256"] or "") and _sha256(clip["path"]) != clip["sha256"]:
             raise RenderError(f"B-roll clip {clip['filename']} changed after the plan was approved.")
     step("inputs checked", clips=len(inputs["clips"]))
@@ -473,8 +480,11 @@ def render_attempt(store: StudioStore, record: dict, render_id: str, bridge: Eng
             raise RenderError("A planned B-roll interval is invalid.")
         if clip_in + play > approved_out + 0.05:
             raise RenderError(f"The cutaway for {clip['filename']} would play past its approved source interval.")
-        if clip_in + play > clip_seconds[asset_id] + 0.05:
-            raise RenderError(f"The cutaway for {clip['filename']} is longer than the clip.")
+        if clip_in + play > clip_seconds[asset_id] + ONE_FRAME:
+            raise RenderError(
+                f"The cutaway for {clip['filename']} needs {clip_in:.3f}–{clip_in + play:.3f} s of the clip, "
+                f"but the clip has {clip_seconds[asset_id]:.3f} s of picture. Shorten it or move its source start earlier."
+            )
         asset = {
             "local_path": str(clip["path"]),
             "file_name": f"broll-{broll_index:03d}.mp4",

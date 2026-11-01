@@ -30,6 +30,7 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from app.config import ENGINE_ROOT
+from app.processing.intervals import fit_cutaway, usable_seconds
 from app.processing.matching import BROLL_CAP, CLIP_BASELINE, CONTRADICTION, EMBED_BASELINE, MIN_WINDOWS_FOR_MEDIAN, SEM_SCALE, VIS_SCALE
 
 CONFIG = {
@@ -307,7 +308,7 @@ def score_asset(asset: dict, phrases: list[Phrase], batch=None, config: dict | N
             if description in (batch.clip_text or {}) and distractors is not None:
                 consistency = float((matrix @ batch.clip_text[description]).mean() - (matrix @ distractors.T).mean())
     contradicted = consistency is not None and consistency < CONTRADICTION
-    clip_seconds = float(asset.get("duration_seconds") or 0.0)
+    clip_seconds = usable_seconds(asset) or 0.0
     duration_fit = 1.0 if clip_seconds >= config["min_hold_seconds"] else (0.6 if clip_seconds >= config["back_to_back_min_seconds"] else 0.0)
     rows = []
     for i, phrase in enumerate(phrases):
@@ -426,7 +427,7 @@ def direct(transcript: dict, catalogue: list[dict], batch, lesson_seconds: float
     for asset_id, row in picks.items():
         phrase = row["phrase"]
         anchor = phrase.words[row["anchor"]]
-        clip_seconds = float(assets[asset_id].get("duration_seconds") or 0.0)
+        clip_seconds = usable_seconds(assets[asset_id]) or 0.0
         start = max(0.0, anchor.start - config["lead_in_seconds"])
         natural = max(phrase.end + config["tail_seconds"], start + config["min_hold_seconds"])
         end = min(natural, start + config["max_hold_seconds"], start + clip_seconds, lesson_seconds)
@@ -450,9 +451,11 @@ def direct(transcript: dict, catalogue: list[dict], batch, lesson_seconds: float
                 continue
         kept.append(item)
     for k, item in enumerate(kept):
-        limit = kept[k + 1]["start"] if k + 1 < len(kept) else lesson_seconds
+        footage = usable_seconds(assets[item["asset_id"]]) or 0.0
+        limit = min(kept[k + 1]["start"] if k + 1 < len(kept) else lesson_seconds, item["start"] + footage)
         if not item.get("back_to_back"):
             item["end"] = min(_snap_end(all_words, item["end"], limit), limit)
+        item["end"] = round(min(item["end"], item["start"] + footage), 3)
         floor = config["back_to_back_min_seconds"] if item.get("back_to_back") else config["min_hold_seconds"]
         if item["end"] - item["start"] < floor - 1e-6:
             notes[item["asset_id"]] = f"There is not enough room for at least {floor:.1f} s on screen."
@@ -471,10 +474,15 @@ def direct(transcript: dict, catalogue: list[dict], batch, lesson_seconds: float
         row = item["row"]
         phrase = row["phrase"]
         play = round(item["end"] - item["start"], 3)
-        clip_seconds = float(asset.get("duration_seconds") or 0.0)
+        clip_seconds = usable_seconds(asset) or 0.0
         best = row["best_frame"]
         source_in = 0.0 if best is None else max(0.0, min(clip_seconds - play, float(best) - play / 2))
-        source_in = round(max(0.0, min(source_in, clip_seconds - play)), 3)
+        floor = config["back_to_back_min_seconds"] if item.get("back_to_back") else config["min_hold_seconds"]
+        fitted = fit_cutaway(item["start"], item["end"], source_in, clip_seconds, floor)
+        if not fitted["ok"]:
+            notes[item["asset_id"]] = fitted["reason"]
+            continue
+        item["end"], source_in, play = fitted["speech_end"], fitted["source_in"], round(fitted["speech_end"] - fitted["speech_start"], 3)
         result = results[item["asset_id"]]
         evidence = "combined" if row["scores"].get("visual") is not None else ("description" if row["scores"].get("semantic") is not None else "description_lexical")
         placements.append(
@@ -491,7 +499,7 @@ def direct(transcript: dict, catalogue: list[dict], batch, lesson_seconds: float
                 "speech_start": item["start"],
                 "speech_end": item["end"],
                 "source_in": source_in,
-                "source_out": round(source_in + play, 3),
+                "source_out": fitted["source_out"],
                 "description_relevance": row["scores"].get("semantic") if row["scores"].get("semantic") is not None else row["scores"]["keyword"],
                 "visual_relevance": row["scores"].get("visual"),
                 "score": row["combined"],

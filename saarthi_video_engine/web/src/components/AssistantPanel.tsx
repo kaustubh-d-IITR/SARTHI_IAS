@@ -13,8 +13,8 @@ const EXAMPLES = [
 ];
 
 /** Optional. Everything here can also be done with the manual controls; nothing is applied without your click. */
-export function AssistantPanel({ sessionId, plan, disabled, onSaved }: { sessionId: string; plan: EditingPlanDocument; disabled: boolean; onSaved: (plan: EditingPlanDocument) => void }) {
-  const [open, setOpen] = useState(false);
+export function AssistantPanel({ sessionId, plan, disabled, onSaved, defaultOpen = false }: { sessionId: string; plan: EditingPlanDocument; disabled: boolean; onSaved: (plan: EditingPlanDocument) => void; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const [message, setMessage] = useState("");
   const [turns, setTurns] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);

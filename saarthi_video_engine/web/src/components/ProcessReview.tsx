@@ -39,6 +39,76 @@ function originLabel(origin: string | undefined, mode: SessionReceipt["mode"]): 
   return "Footage";
 }
 
+const WORKSPACE_TABS = [
+  { id: "review", label: "Cutaways & timeline" },
+  { id: "look", label: "Look & sound" },
+  { id: "assistant", label: "AI editing assistant" },
+] as const;
+
+/** Where every editing control lives. Locked, with the reason, until the plan exists. */
+function EditingWorkspace({
+  ready,
+  failed,
+  review,
+  look,
+  assistant,
+}: {
+  ready: boolean;
+  failed: boolean;
+  review: React.ReactNode;
+  look: React.ReactNode;
+  assistant: React.ReactNode;
+}) {
+  const [tab, setTab] = useState<(typeof WORKSPACE_TABS)[number]["id"]>("review");
+  return (
+    <section id="editing-workspace" className="rounded-3xl border-2 border-teal/50 bg-white p-6" aria-label="Editing workspace">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="font-serif text-2xl text-ink">Editing workspace</h2>
+        {ready && (
+          <a href="#workspace-render" className="text-sm text-teal underline">
+            Go to render
+          </a>
+        )}
+      </div>
+      <p className="mt-1 text-sm text-slate-600">Timeline and cutaways, background music and your own music, filters and effects, captions and framing, and the AI editing assistant.</p>
+      {!ready ? (
+        <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700" role="status">
+          {failed ? (
+            <p>Processing failed, so there is no editing plan to work on yet. Use “Retry processing” above; the workspace opens as soon as processing succeeds.</p>
+          ) : (
+            <p>The workspace opens when the editing plan is ready. Processing is still running.</p>
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="mt-4 flex flex-wrap gap-2" role="tablist" aria-label="Editing workspace sections">
+            {WORKSPACE_TABS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                id={`workspace-tab-${item.id}`}
+                aria-selected={tab === item.id}
+                aria-controls={`workspace-${item.id}`}
+                onClick={() => setTab(item.id)}
+                className={`rounded-full border px-4 py-2 text-sm ${tab === item.id ? "border-teal bg-teal text-white" : "border-line text-ink"}`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+          {/* Panels stay mounted so unsaved edits survive switching tabs. */}
+          {WORKSPACE_TABS.map((item) => (
+            <div key={item.id} className="mt-4" role="tabpanel" id={`workspace-${item.id}`} aria-labelledby={`workspace-tab-${item.id}`} hidden={tab !== item.id}>
+              {item.id === "review" ? review : item.id === "look" ? look : assistant}
+            </div>
+          ))}
+        </>
+      )}
+    </section>
+  );
+}
+
 export function ProcessReview({
   receipt,
   status,
@@ -170,8 +240,16 @@ export function ProcessReview({
         </div>
       </section>
 
+      <EditingWorkspace
+        ready={status.status === "plan_ready" && Boolean(plan) && Boolean(onPlanSaved)}
+        failed={status.status === "failed"}
+        review={plan && onPlanSaved ? <PlanReview sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} transcript={transcript} /> : null}
+        look={plan && onPlanSaved ? <StudioControls sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} /> : null}
+        assistant={plan && onPlanSaved ? <AssistantPanel sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} defaultOpen /> : null}
+      />
+
       {status.status === "plan_ready" && status.counts && (
-        <section className="rounded-3xl border border-line bg-white p-6" aria-label="Plan summary">
+        <section id="workspace-render" className="rounded-3xl border border-line bg-white p-6" aria-label="Plan summary">
           <h2 className="font-serif text-2xl text-ink">Editing plan ready</h2>
           <p className="mt-2 text-sm text-slate-600">Transcription completed. Review the approved edit, then render when ready.</p>
           <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
@@ -225,14 +303,6 @@ export function ProcessReview({
             plan={plan}
           />
         </section>
-      )}
-
-      {status.status === "plan_ready" && plan && onPlanSaved && (
-        <>
-          <PlanReview sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} transcript={transcript} />
-          <StudioControls sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} />
-          <AssistantPanel sessionId={receipt.session_id} plan={plan} disabled={isRendering(render)} onSaved={onPlanSaved} />
-        </>
       )}
 
       {transcript && (

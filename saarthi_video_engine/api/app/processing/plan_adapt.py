@@ -246,7 +246,39 @@ PLACEMENT_FIELDS = (
     "occurrence",
     "placement_rule",
     "user_override",
+    "adjusted",
 )
+
+
+def fit_placements(placements: list[dict], catalogue: list[dict], min_seconds: float = MIN_CUTAWAY) -> tuple[list[dict], list[dict]]:
+    """Every approved placement inside its clip's real footage, or moved to the rejected list with a reason.
+
+    Back-to-back cutaways (one ends where the next starts) may be as short as BACK_TO_BACK_MIN.
+    """
+    from app.processing.intervals import fit_cutaway, usable_seconds
+
+    footage = {item["asset_id"]: usable_seconds(item) for item in catalogue}
+    ordered = sorted(placements, key=lambda item: float(item.get("speech_start") or 0))
+    kept, rejected = [], []
+    for index, item in enumerate(ordered):
+        clip = footage.get(item["asset_id"])
+        if clip is None:
+            clip = usable_seconds(item)
+        following = ordered[index + 1] if index + 1 < len(ordered) else None
+        adjacent = following is not None and abs(float(following["speech_start"]) - float(item["speech_end"])) <= 0.05
+        fitted = fit_cutaway(item["speech_start"], item["speech_end"], item.get("source_in") or 0.0, clip, BACK_TO_BACK_MIN if adjacent else min_seconds)
+        if fitted["ok"] and adjacent and fitted["speech_end"] < float(item["speech_end"]) - 0.05 and fitted["speech_end"] - fitted["speech_start"] < min_seconds - 1e-3:
+            fitted = {"ok": False, "reason": f"Its {clip:.2f} s of footage no longer reaches the next cutaway and is shorter than {min_seconds:.1f} s."}
+        if not fitted["ok"]:
+            rejected.append(dict(item, approval="rejected", reason=f"{fitted['reason']} The teacher stays on screen."))
+            continue
+        row = dict(item, speech_end=fitted["speech_end"], source_in=fitted["source_in"], source_out=fitted["source_out"])
+        if clip is not None:
+            row["clip_duration"] = clip
+        if fitted["adjusted"]:
+            row["adjusted"] = fitted["adjusted"]
+        kept.append(row)
+    return kept, rejected
 
 
 def public_plan(
@@ -343,7 +375,7 @@ def validate_envelope(session: dict, engine_plan: dict, placements: list[dict], 
         if duration is None:
             duration = placement.get("clip_duration")
         if isinstance(duration, (int, float)) and end > float(duration) + 1e-3:
-            errors.append(f"{placement.get('asset_id')}: source interval is past the clip duration")
+            errors.append(f"{placement.get('asset_id')} ({placement.get('filename') or 'clip'}): source interval {start:.3f}–{end:.3f} s is past the clip duration of {float(duration):.3f} s")
         if mode == "my_broll":
             if placement.get("asset_id") not in owned:
                 errors.append(f"{placement.get('asset_id')}: asset is not part of this session")

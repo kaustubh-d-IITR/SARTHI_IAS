@@ -17,6 +17,7 @@ from app.processing.plan_adapt import (
     validate_envelope,
 )
 from app.processing.director import find_phrase, phrase_at
+from app.processing.intervals import fit_cutaway
 from app.processing.settings import merge
 from app.processing.titles import clean_title, title_record
 from app.processing.versions import load_version, save_version
@@ -201,6 +202,14 @@ def apply_edits(store: StudioStore, session_id: str, owner: str, body: dict, loc
                 row["reason"] = "Rejected in the Studio review; the teacher stays on screen."
                 rejected.append(row)
                 continue
+            fitted = fit_cutaway(start, end, source_in, info["clip_duration"] or None, BACK_TO_BACK_MIN, keep_source=True)
+            if not fitted["ok"]:
+                raise StudioError(422, "invalid_source", f"{info['filename']}: {fitted['reason']}")
+            if fitted["adjusted"]:
+                end, source_in, source_out = fitted["speech_end"], fitted["source_in"], fitted["source_out"]
+                row.update({"speech_end": end, "source_in": source_in, "source_out": source_out, "adjusted": fitted["adjusted"]})
+            else:
+                row.pop("adjusted", None)
             if start < 0 or end > duration + 1e-3 or end - start < BACK_TO_BACK_MIN - 1e-6:
                 raise StudioError(422, "invalid_timeline", f"{info['filename']}: the cutaway must last at least {MIN_CUTAWAY:.0f} s inside the lesson (0–{duration:.2f} s).")
             if source_in < 0 or source_out > info["clip_duration"] + 1e-3 or source_out <= source_in:

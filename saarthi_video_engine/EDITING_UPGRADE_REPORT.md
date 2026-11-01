@@ -73,3 +73,28 @@ Before/after: the 16:9 lesson changed from a 720×354 strip in a card to a teach
 - **Focus detection** uses motion, not face detection; a still teacher falls back to the centre (the user can set the focus).
 - **Worker image** was not completed locally (see tests). Render builds it on its own infrastructure.
 - **Production** verification depends on Render's manual deploy (`autoDeploy: false`) of both services after the push.
+
+## 6. Production repair: "source interval is past the clip duration"
+
+Production session `85865c1b-…` (lesson `VIDEO_2.mp4`, three 2 s clips) failed in plan validation. Reproduced locally with the same lesson transcript and three 2.0 s clips: the director gave `ncert_books_red_cross_2s.mp4` the timeline 1.26–3.44 s and the source 0–2.18 s. The clip has 2.0 s. `_snap_end` extended the end to the end of the spoken word without the clip's length as a limit. The production asset id `85dd3534-…` is most likely that NCERT clip; production records were not read.
+
+Fix:
+
+- `api/app/processing/intervals.py` holds the rule for every path: the source window must lie inside 0..usable footage, where usable footage is the shorter of the container and the video stream. Times are rounded towards the inside of the clip.
+  - Too long: the cutaway is shortened to the footage.
+  - Too short after fitting: rejected with a reason; the teacher stays on screen.
+  - Footage is never taken from another clip.
+- Director: snapping and the final window are limited by the clip's footage.
+- Processing: `fit_placements` re-checks every placement (Mode A and B) before the plan is built.
+- Review edits: a typed source start is kept. The end is clamped if enough footage remains; otherwise 422 with the reason. The row carries `adjusted`, shown in the review.
+- Upload probe: records the video stream duration. Older uploads are probed again.
+- Renderer: refuses an interval longer than the picture (one-frame tolerance), with the numbers, before HyperFrames runs.
+- Captions: an English line with many short words ("I", "am", "a") was treated as Whisper letter tokens and shown whole; only non-Latin tokens count now.
+- Web: the editing controls were only mounted after `plan_ready`, at the bottom of the page. A failed session showed none of them. They are now in an "Editing workspace" directly under the status card, with tabs:
+  - Cutaways & timeline
+  - Look & sound
+  - AI editing assistant
+
+  The workspace states why it is locked when processing has failed.
+
+Local verification: `api/tests/test_intervals.py` (12 tests) and the full suites pass. A real HyperFrames rehearsal with three 2.0 s clips placed the newspaper at 0.12–1.26 s (source 0–1.14 s), NCERT at 1.26–3.26 s (0–2.0 s) and YouTube at 6.08–8.08 s (0–2.0 s). Output: 720×1280, 30 fps, 49.66 s, QA passed (12 checks), narration correlation 0.9645, outro music present. Production is fixed only after both Render services are redeployed and the session is processed again.

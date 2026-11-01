@@ -35,8 +35,24 @@ def analyse_description(text: str) -> dict:
     }
 
 
+def _usable(meta: dict, path: Path) -> tuple[float | None, float | None]:
+    """Container duration and the picture's own duration (probed now for uploads stored before it was recorded)."""
+    container = meta.get("duration_seconds")
+    picture = meta.get("video_duration_seconds")
+    if picture is None:
+        try:
+            from app.media_probe import probe_video
+
+            picture = probe_video(path).get("video_duration_seconds")
+        except Exception:  # noqa: BLE001 - the stored duration still applies
+            picture = None
+    values = [float(v) for v in (container, picture) if isinstance(v, (int, float)) and float(v) > 0]
+    return (float(container) if isinstance(container, (int, float)) else None), (min(values) if values else None)
+
+
 def catalogue_asset(meta: dict, path: Path) -> dict:
     description = analyse_description(meta.get("description") or "")
+    container, usable = _usable(meta, path)
     return {
         "asset_id": meta["upload_id"],
         "filename": meta.get("filename") or "clip",
@@ -44,7 +60,8 @@ def catalogue_asset(meta: dict, path: Path) -> dict:
         "description": description["text"],
         "user_description": meta.get("description") or "",
         "analysis": description,
-        "duration_seconds": meta.get("duration_seconds"),
+        "duration_seconds": usable,
+        "media_duration_seconds": container,
         "width": meta.get("width"),
         "height": meta.get("height"),
         "frame_rate": meta.get("frame_rate"),

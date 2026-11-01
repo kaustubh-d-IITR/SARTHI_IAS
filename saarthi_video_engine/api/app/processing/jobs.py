@@ -14,6 +14,7 @@ from app.processing.settings import default_settings, merge
 from app.processing.plan_adapt import (
     assets_from_engine,
     assets_from_user,
+    fit_placements,
     build_engine_plan,
     lesson_duration,
     public_plan,
@@ -221,7 +222,16 @@ def _run(store: StudioStore, session_id: str, client_id: str, services: Services
         batch, analysis_info = _analyse_footage(store, transcript, catalogue, services)
         _advance(store, session_id, client_id, "selecting_footage", "Matching clips to the speech.")
         placements, evaluations = direct(transcript, catalogue, batch, duration)
+    placements, unfit = fit_placements(placements, catalogue)
+    if record["mode"] == "auto_edit":
+        keep = {item["asset_id"]: item for item in placements}
+        assets = [dict(asset, window=[keep[asset["id"]]["speech_start"], keep[asset["id"]]["speech_end"]], duration_seconds=round(keep[asset["id"]]["speech_end"] - keep[asset["id"]]["speech_start"], 3)) for asset in assets if asset["id"] in keep]
+    else:
         assets = assets_from_user(placements)
+    for item in unfit:
+        evaluation = next((row for row in evaluations if row["asset_id"] == item["asset_id"]), None)
+        if evaluation is not None:
+            evaluation.update({"status": "abstained", "reason": item["reason"]})
     (work / "catalogue.json").write_text(
         json.dumps({"assets": [_private_catalogue(item) for item in catalogue], "evaluations": evaluations, "analysis": analysis_info}, indent=2),
         encoding="utf-8",
@@ -237,6 +247,7 @@ def _run(store: StudioStore, session_id: str, client_id: str, services: Services
             pass
     engine_plan = build_engine_plan(transcript, assets, duration, title["text"], settings["captions"]["max_words"])
     placements, dropped = reconcile(placements, engine_plan)
+    dropped = unfit + dropped
     _advance(store, session_id, client_id, "validating_plan", "Checking timestamps and asset references.")
     validation = validate_envelope(record, engine_plan, placements, catalogue)
     envelope = public_plan(record, engine_plan, placements, validation, catalogue, evaluations, dropped)
